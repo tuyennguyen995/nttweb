@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Quản lý sinh viên</title>
+</head>
+<body>
+  <form action="" method="POST" enctype="application/x-www-form-urlencoded" onSubmit="return checkPw(this)">
+    <input type="text" name="username" placeholder="Tên đăng nhập" autocomplete="off">
+    <input type="password" name="password" placeholder="Mật khẩu" autocomplete="off">
+    <input type="submit" name="btnlogin" value="Đăng nhập">
+  </form>
+
+  <script type="text/javascript">
+    function checkPw(form) {
+    user = form.username.value;
+    pw1 = form.passwords.value;
+
+    if(user==""){
+      alert ("\nTên đăng nhập không được để trống!");
+      return false;
+    }
+    if (pw1 == "") {
+      alert ("\nMật khẩu không được để trống!");
+      return false;
+    }
+    return true;
+  }
+  </script>
+</body>
+</html>
