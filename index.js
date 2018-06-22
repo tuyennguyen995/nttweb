@@ -24,7 +24,7 @@ const config = new sequelize ({
   port:"5432",
   dialect: "postgres",
   operatorsAliases: false,
-  dialectOptions: { ssl: false},
+  dialectOptions: { ssl: true},
   define: {freezeTableName: true}
 });
 
@@ -38,13 +38,21 @@ const USER = config.define('USER',{
   username: sequelize.STRING,
   password: sequelize.STRING
 })
+const TINH = config.define('TINH',{
+  MA_TINH: sequelize.INTEGER,
+  TEN_TINH: sequelize.STRING
+})
 //Đồng bộ với sql
 config.sync()
 
 //Trang private
 app.get('/',(req, res) => {
   if(req.isAuthenticated()){
-    res.render('index')
+    USER.findAll({raw: true})
+    .then(arrUSER => {
+      tes.render('index.ejs', {data: arrUSER});
+    })
+    .catch(err=> console.log(err.message))
   }else {
     res.redirect('/login');
   }
@@ -88,8 +96,3 @@ Passport.deserializeUser(function(name, done) {
     return done(null, false);
   })
 });
-
-USER.create({
-  username: 'hr1',
-  password: 'hr1'
-}).then(USER => console.log(USER.get({plain: true})))
