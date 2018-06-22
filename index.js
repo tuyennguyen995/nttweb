@@ -33,6 +33,14 @@ config.authenticate()
 .then(() => console.log("Connected!"))
 .catch(err => console.log(err.message))
 
+//Tao bảng trong sql
+const USER = config.define('USER',{
+  username: sequelize.STRING,
+  password: sequelize.STRING
+})
+//Đồng bộ với sql
+config.sync()
+
 //Trang private
 app.get('/',(req, res) => {
   if(req.isAuthenticated()){
@@ -49,24 +57,20 @@ app.route('/login')
 
 //Kiểm tra chứng thực user
 Passport.use(new LocalStrategy((username, password, done) => {
-  pool.connect(function(err, client, done){
-    if(err){
-      console.log("Connect database login error!");
+  USER.findOne({where:{username: username}})
+  .then(USER => {
+    //code
+    if(USER.password == password){
+      console.log("Password chính xác!");
+      return done(null, USER.username);
     }else {
-      client.query("SELECT * FROM 	USER where TEN_USER='"+username+"'", function(error, result){
-          if(rows == ""){
-              console.log('Tài khoản không tồn tại!');
-              return done(null, false);
-          }
-          else if(rows[0].PASS_USER == password){
-            console.log("Password chính xác!");
-            return done(null, result[0].TEN_USER);
-          }else {
-              console.log("Password không chính xác!");
-              return done(null, false);
-          }
-      })
+        console.log("Password không chính xác!");
+        return done(null, false);
     }
+  })
+  .catch(err => {
+    console.log('Tài khoản không tồn tại!');
+    return done(null, false);
   })
 }));
 
@@ -74,18 +78,13 @@ Passport.serializeUser((user, done) =>{
   done(null, user);
 })
 Passport.deserializeUser(function(name, done) {
-  pool.connect(function(err, client, done){
-    if(err){
-      console.log("Connect database login error!");
-    }else {
-      client.query("SELECT * FROM 	USER where TEN_USER='"+name+"'", function(error, result){
-          if(rows == ""){
-              console.log('Tài khoản không tồn tại!');
-              return done(null, false);
-          }else {
-              return done(null, result[0].TEN_USER);
-          }
-      })
-    }
+  USER.findOne({where:{username: name}})
+  .then(USER => {
+    //code
+    return done(null, USER.username);
+  })
+  .catch(err => {
+    console.log('Tài khoản không tồn tại!');
+    return done(null, false);
   })
 });
