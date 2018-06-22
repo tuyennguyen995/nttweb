@@ -10,25 +10,28 @@ app.set('views', './views');
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(session({ secret: 'secret', name: 'cookie_dangnhap', cookie:{maxAge: 1000*60*30}, proxy: true, resave: true, saveUninitialized: true}));
+app.use(session({ secret: 'secret', name: 'cookie_dangnhap', cookie:{maxAge: 1000*60*3}, proxy: true, resave: true, saveUninitialized: true}));
 app.use(Passport.initialize());
 app.use(Passport.session());
 
-var mysql = require('mysql'); //Ket noi module
-var connection = mysql.createConnection({  //Bien connect
-  host: 'localhost',  //Sai Xampp mac dinh là localhost
-  user: 'root',       //Mac dinh root
-  password: 'admin@123',       //Mat khau mat dinh trong
-  database: 'datantt'  //Ten csdl
+//Kết nối database
+const sequelize = require('sequelize');
+const config = new sequelize ({
+  host: "localhost",
+  username: "postgres",
+  password: "admin@123",
+  database: "DataNTT",
+  port:"5432",
+  dialect: "postgres",
+  operatorsAliases: false,
+  dialectOptions: { ssl: false},
+  define: {freezeTableName: true}
 });
-connection.connect(function(error){
-  if(!!error){
-    console.log('Error connect!');
-  }
-  else{
-  console.log('Connected!');
-  }
-})
+
+//Kiểm tra kết nối
+config.authenticate()
+.then(() => console.log("Connected!"))
+.catch(err => console.log(err.message))
 
 //Trang private
 app.get('/',(req, res) => {
@@ -39,34 +42,50 @@ app.get('/',(req, res) => {
   }
 });
 
+//Điều hướng route
 app.route('/login')
 .get((req, res) => res.render('login'))
 .post(Passport.authenticate('local',{failureRedirect: '/login', successRedirect: '/'}))
 
+//Kiểm tra chứng thực user
 Passport.use(new LocalStrategy((username, password, done) => {
-  connection.query("SELECT * FROM 	USERS where TEN_USER='"+username+"'", function(error, rows){
-      if(rows == ""){
-          return done(null, false);
-      }
-      else if(rows[0].PASS_USER == password){
-        console.log("OK");
-        return done(null, rows[0].TEN_USER);
-      }else {
-          console.log("False");
-          return done(null, false);
-      }
+  pool.connect(function(err, client, done){
+    if(err){
+      console.log("Connect database login error!");
+    }else {
+      client.query("SELECT * FROM 	USER where TEN_USER='"+username+"'", function(error, result){
+          if(rows == ""){
+              console.log('Tài khoản không tồn tại!');
+              return done(null, false);
+          }
+          else if(rows[0].PASS_USER == password){
+            console.log("Password chính xác!");
+            return done(null, result[0].TEN_USER);
+          }else {
+              console.log("Password không chính xác!");
+              return done(null, false);
+          }
+      })
+    }
   })
-}))
+}));
 
 Passport.serializeUser((user, done) =>{
   done(null, user);
 })
 Passport.deserializeUser(function(name, done) {
-  connection.query("SELECT * FROM 	USERS where TEN_USER='"+name+"'", function(error, rows){
-      if(rows == ""){
-          return done(null, false);
-      }else {
-          return done(null, rows[0].TEN_USER);
-      }
+  pool.connect(function(err, client, done){
+    if(err){
+      console.log("Connect database login error!");
+    }else {
+      client.query("SELECT * FROM 	USER where TEN_USER='"+name+"'", function(error, result){
+          if(rows == ""){
+              console.log('Tài khoản không tồn tại!');
+              return done(null, false);
+          }else {
+              return done(null, result[0].TEN_USER);
+          }
+      })
+    }
   })
 });
