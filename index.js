@@ -41,6 +41,11 @@ const USER = config.define('USER',{
 const TINH = config.define('TINH',{
   TEN_TINH: sequelize.STRING
 })
+
+const QUAN_HUYEN = config.define('QUAN_HUYEN',{
+  TEN_QUAN_HUYEN: sequelize.STRING,
+  TINH: sequelize.INTEGER
+})
 //Đồng bộ với sql
 config.sync()
 
@@ -49,7 +54,11 @@ app.get('/',(req, res) => {
   if(req.isAuthenticated()){
     TINH.findAll({raw: true})
     .then(arrTINH => {
-      res.render('index.ejs', {data: arrTINH});
+      QUAN_HUYEN.findAll({raw: true})
+      .then(arrQH => {
+        res.render('index.ejs', {data1: arrTINH, data2: arrQH});
+      })
+      .catch(err=> console.log(err.message))
     })
     .catch(err=> console.log(err.message))
   }else {
