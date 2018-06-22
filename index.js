@@ -39,7 +39,6 @@ const USER = config.define('USER',{
   password: sequelize.STRING
 })
 const TINH = config.define('TINH',{
-  MA_TINH: sequelize.INTEGER,
   TEN_TINH: sequelize.STRING
 })
 //Đồng bộ với sql
@@ -48,9 +47,9 @@ config.sync()
 //Trang private
 app.get('/',(req, res) => {
   if(req.isAuthenticated()){
-    USER.findAll({raw: true})
-    .then(arrUSER => {
-      tes.render('index.ejs', {data: arrUSER});
+    TINH.findAll({raw: true})
+    .then(arrTINH => {
+      res.render('index.ejs', {data: arrTINH});
     })
     .catch(err=> console.log(err.message))
   }else {

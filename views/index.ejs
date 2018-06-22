@@ -8,5 +8,17 @@
 </head>
 <body>
   Trang chủ
+  <select class="" name="" id="list" onchange="getSelect();">
+    <% data.forEach(function(ds){ %>
+        <option value='<%= ds.id%>'><%= ds.TEN_TINH%></option>
+    <%})%>
+  </select>
+
+  <script type="text/javascript">
+    function getSelect(){
+      var Sel = document.getElementById("list").value;
+      console.log(Sel);
+    }
+  </script>
 </body>
 </html>
