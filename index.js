@@ -88,3 +88,8 @@ Passport.deserializeUser(function(name, done) {
     return done(null, false);
   })
 });
+
+USER.create({
+  username: 'admin',
+  password: 'admin'
+}).then(USER => console.log(USER.get({plain: true})))
