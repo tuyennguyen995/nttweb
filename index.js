@@ -4,7 +4,9 @@ const Passport = require('passport');
 const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
 const app = express();
-app.listen(process.env.PORT || 3000);
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+server.listen(process.env.PORT || 3000);
 
 app.set('views', './views');
 app.set('view engine', 'ejs');
@@ -13,21 +15,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({ secret: 'secret', name: 'cookie_dangnhap', cookie:{maxAge: 1000*60*3}, proxy: true, resave: true, saveUninitialized: true}));
 app.use(Passport.initialize());
 app.use(Passport.session());
+app.use(express.static("public"));
 
-//Kết nối database
 const sequelize = require('sequelize');
-const config = new sequelize ({
-  host: "ec2-54-204-23-228.compute-1.amazonaws.com",
-  username: "qsazzvvbopiolj",
-  password: "23d411af50c296de532da9df874d68d657d9af9108a9607baa3e0d1cde1931ef",
-  database: "dauaa88394fkno",
-  port:"5432",
-  dialect: "postgres",
-  operatorsAliases: false,
-  dialectOptions: { ssl: true},
-  define: {freezeTableName: true}
-});
-
+const config = require('./db.js');
 //Kiểm tra kết nối
 config.authenticate()
 .then(() => console.log("Connected!"))
@@ -47,7 +38,18 @@ const QUAN_HUYEN = config.define('QUAN_HUYEN',{
   TINH: sequelize.INTEGER
 })
 //Đồng bộ với sql
-config.sync()
+config.sync();
+
+//Lắng nghe kết nối tới Server
+io.on("connection", function(socket){
+  console.log("Có người kết nối kìa!" + socket.id);
+  socket.on("disconnect", function(){
+    console.log(socket.id +" ngắt kết nối!!");
+  });
+  socket.on("trangchu_send_data", function(data){
+    console.log(data);
+  })
+});
 
 //Trang private
 app.get('/',(req, res) => {

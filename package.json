@@ -15,7 +15,8 @@
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.38.0",
-    "session": "^0.1.0"
+    "session": "^0.1.0",
+    "socketio": "^1.0.0"
   },
   "devDependencies": {},
   "scripts": {
