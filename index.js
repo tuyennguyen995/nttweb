@@ -23,7 +23,7 @@ const config = require('./db.js');
 config.authenticate()
 .then(() => console.log("Connected!"))
 .catch(err => console.log(err.message))
-var temp = 1;
+var temp = 0;
 //Tao bảng trong sql
 const USER = config.define('USER',{
   username: sequelize.STRING,
@@ -81,7 +81,7 @@ Passport.use(new LocalStrategy((username, password, done) => {
     }
   })
   .catch(err => {
-    temp = 0;
+    temp = 1;
     console.log('Tài khoản không tồn tại!');
     return done(null, false);
   })
@@ -128,4 +128,5 @@ io.on("connection", function(socket){
     .catch(err=> console.log(err.message))
   });
   socket.emit("server_sendData_login", temp);
+  temp = 0;
 });
