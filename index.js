@@ -5,8 +5,8 @@ const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(http);
-server.listen(process.env.PORT || 3000);
+const io = require('socket.io')(server);
+server.listen(process.env.PORT);
 
 app.set('views', './views');
 app.set('view engine', 'ejs');
