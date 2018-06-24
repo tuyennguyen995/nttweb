@@ -69,6 +69,13 @@ io.on("connection", function(socket){
     })
     .catch(err=> console.log(err.message))
   });
+  socket.on("login_sendData_user", function(data){
+    USER.findAll({where:{ username: data}})
+    .then(arrUS => {
+        socket.emit("server_sendData_user", arrUS);
+        console.log(arrUS);
+    })
+  });
 });
 
 //Trang private

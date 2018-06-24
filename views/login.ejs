@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Quản lý sinh viên</title>
+  <script src="jquery-3.3.1.min.js"></script>
+  <!-- Kết nối socket.io -->
+  <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
 </head>
 <body>
   <form action="" method="POST" enctype="application/x-www-form-urlencoded" onSubmit="return checkPw(this)">
@@ -18,15 +21,24 @@
     user = form.username.value;
     pw1 = form.password.value;
 
-    if(user==""){
-      alert ("\nTên đăng nhập không được để trống!");
-      return false;
-    }
-    if (pw1 == "") {
-      alert ("\nMật khẩu không được để trống!");
-      return false;
-    }
-    return true;
+    const socket = io("https://nttweb.herokuapp.com");
+    socket.emit("login_sendData_user",user);
+    socket.on("server_sendData_user", function(data){
+      console.log(data);
+      if(user==""){
+        alert ("\nTên đăng nhập không được để trống!");
+        return false;
+      }
+      if (pw1 == "") {
+        alert ("\nMật khẩu không được để trống!");
+        return false;
+      }
+       if (data == user) {
+         alert ("\nTên đăng nhập đã tồn tại!");
+         return false;
+      }
+      return true;
+    });
   }
   </script>
 </body>
