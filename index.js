@@ -37,6 +37,10 @@ const QUAN_HUYEN = config.define('QUAN_HUYEN',{
   TEN_QUAN_HUYEN: sequelize.STRING,
   TINH: sequelize.INTEGER
 })
+const PHUONG_XA = config.define('PHUONG_XA',{
+  TEN_PHUONG_XA: sequelize.STRING,
+  MA_QUAN_HUYEN: sequelize.INTEGER
+})
 //Đồng bộ với sql
 config.sync();
 
@@ -46,9 +50,25 @@ io.on("connection", function(socket){
   socket.on("disconnect", function(){
     console.log(socket.id +" ngắt kết nối!!");
   });
-  socket.on("trangchu_send_data", function(data){
-    console.log(data);
-  })
+  socket.on("trangchu_sendData_QH", function(data){
+    //Gửi về cho tất cả người dùng
+    //io.sockets.emit("server_send_data", data+"8989");
+    //Gửi về cho tất cả người dùng nhưng k gửi lại người đã gửi
+    //io.broadcast.emit("server_send_data", data+"8989");
+    //Gửi về cho người đã send
+    QUAN_HUYEN.findAll({where:{ TINH: data}})
+    .then(arrQH => {
+        socket.emit("server_sendData_QH", arrQH);
+    })
+    .catch(err=> console.log(err.message))
+  });
+  socket.on("trangchu_sendData_PX", function(data){
+    PHUONG_XA.findAll({where:{ MA_QUAN_HUYEN: data}})
+    .then(arrPX => {
+        socket.emit("server_sendData_PX", arrPX);
+    })
+    .catch(err=> console.log(err.message))
+  });
 });
 
 //Trang private
@@ -56,11 +76,7 @@ app.get('/',(req, res) => {
   if(req.isAuthenticated()){
     TINH.findAll({raw: true})
     .then(arrTINH => {
-      QUAN_HUYEN.findAll({raw: true})
-      .then(arrQH => {
-        res.render('index.ejs', {data1: arrTINH, data2: arrQH});
-      })
-      .catch(err=> console.log(err.message))
+      res.render('index.ejs', {data1: arrTINH});
     })
     .catch(err=> console.log(err.message))
   }else {
