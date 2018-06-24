@@ -23,8 +23,9 @@
     <!-- Custom Fonts -->
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <!-- jQuery -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-
+    <script src="jquery-3.3.1.min.js"></script>
+    <!-- Kết nối socket.io -->
+    <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
     <script type="text/javascript">
       const socket = io("https://nttweb.herokuapp.com");
       socket.on("server_sendData_login", function(data){
@@ -39,14 +40,18 @@
 
 </head>
 
-<body>
-
+<body bgimage="image/bg.jpg">
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
+                <div class="login-panel panel panel-default" style="margin-top: 50%;
+    box-shadow: 0px 0px 3px 0px;
+    -moz-box-shadow: 0px 0px 3px 0px;
+    -webkit-box-shadow: 0px 0px 3px 0px;
+    -o-box-shadow: 0px 0px 3px 0px;
+    -ms-box-shadow: 0px 0px 3px 0px;">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Đăng Nhập</h3>
+                        <h3 class="panel-title">QUẢN TRỊ HỆ THỐNG</h3>
                     </div>
                     <div class="panel-body">
                         <form action="" method="POST" enctype="application/x-www-form-urlencoded" onsubmit="return checkPw(this);">
@@ -58,7 +63,8 @@
                                     <input class="form-control" placeholder="Mật khẩu" name="password" type="password" value="" autocomplete="off">
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
-                                <input type="submit" name="btnlogin" class="btn btn-lg btn-success btn-block">
+                                <p><a href="#" >Quên mật khẩu?</a></p>
+                                <input type="submit" name="btnlogin" class="btn btn-success btn-block" value="Đăng nhập" style="float: right;">
                             </fieldset>
                         </form>
                     </div>
@@ -68,15 +74,14 @@
     </div>
 
     <!-- Bootstrap Core JavaScript -->
-    <!-- <script src="vendor/bootstrap/js/bootstrap.min.js"></script> -->
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
-    <!-- <script src="vendor/metisMenu/metisMenu.min.js"></script> -->
+    <script src="vendor/metisMenu/metisMenu.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
-    <!-- <script src="dist/js/sb-admin-2.js"></script> -->
+    <script src="dist/js/sb-admin-2.js"></script>
 
-    <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
     <script type="text/javascript">
       function checkPw(form) {
       user = form.username.value;

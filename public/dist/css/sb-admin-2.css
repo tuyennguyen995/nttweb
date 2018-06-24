@@ -4,7 +4,10 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 body {
-  background-color: #f8f8f8;
+  background-image: url("../../image/bg.jpg");
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover ;
 }
 #wrapper {
   width: 100%;
