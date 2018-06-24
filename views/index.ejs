@@ -21,7 +21,7 @@
         document.getElementById('list3').style.visibility = 'hidden';
       }else if(Sel1 != null) {
         //Xử lý khi chọn select
-        const socket = io("http://localhost:3000/");
+        const socket = io("https://nttweb.herokuapp.com");
         socket.emit("trangchu_sendData_QH",Sel1);
         socket.on("server_sendData_QH", function(data){
           $('#quanhuyen').html("<option value='"+temp+"'>-- Chọn Quận/Huyện --</option>");
