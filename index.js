@@ -75,6 +75,9 @@ io.on("connection", function(socket){
         socket.emit("server_sendData_user", arrUS);
         console.log(arrUS);
     })
+    .catch(err=> {
+      socket.emit("server_sendData_user", "emty");
+    })
   });
 });
 

@@ -33,11 +33,18 @@
         alert ("\nMật khẩu không được để trống!");
         return false;
       }
-       if (data == user) {
-         alert ("\nTên đăng nhập đã tồn tại!");
+       if (data == "emty") {
+         alert ("\nTài khoản không tồn tại!");
          return false;
       }
-      return true;
+      if(data.username == user){
+        if(data.password == pw1){
+          return true;
+        }else {
+          alert ("\nMật khẩu không chính xác!");
+          return false;
+        }
+      }
     });
   }
   </script>
