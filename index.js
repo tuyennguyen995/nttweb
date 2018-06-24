@@ -6,7 +6,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-server.listen(process.env.PORT);
+server.listen(process.env.PORT ||3000);
 
 app.set('views', './views');
 app.set('view engine', 'ejs');
@@ -23,7 +23,7 @@ const config = require('./db.js');
 config.authenticate()
 .then(() => console.log("Connected!"))
 .catch(err => console.log(err.message))
-
+var temp = 1;
 //Tao bảng trong sql
 const USER = config.define('USER',{
   username: sequelize.STRING,
@@ -43,6 +43,64 @@ const PHUONG_XA = config.define('PHUONG_XA',{
 })
 //Đồng bộ với sql
 config.sync();
+
+app.get("/login", function(req, res){
+  res.render("login.ejs")
+})
+
+//Trang private
+app.get('/',(req, res) => {
+  if(req.isAuthenticated()){
+    TINH.findAll({raw: true})
+    .then(arrTINH => {
+      res.render('index.ejs', {data1: arrTINH});
+    })
+    .catch(err=> console.log(err.message))
+  }else {
+    res.redirect('/login');
+  }
+});
+
+//Điều hướng route
+app.route('/login')
+.get((req, res) => res.render('login'))
+.post(Passport.authenticate('local',{failureRedirect: '/login',successRedirect: '/'}))
+
+//Kiểm tra chứng thực user
+Passport.use(new LocalStrategy((username, password, done) => {
+  USER.findOne({where:{username: username}})
+  .then(USER => {
+    //code
+    if(USER.password == password){
+      console.log("Password chính xác!");
+      return done(null, USER.username);
+    }else {
+        temp = -1;
+        console.log("Password không chính xác!");
+        return done(null, false);
+    }
+  })
+  .catch(err => {
+    temp = 0;
+    console.log('Tài khoản không tồn tại!');
+    return done(null, false);
+  })
+}));
+
+Passport.serializeUser((user, done) =>{
+  done(null, user);
+})
+Passport.deserializeUser(function(name, done) {
+  USER.findOne({where:{username: name}})
+  .then(USER => {
+    //code
+    return done(null, USER.username);
+  })
+  .catch(err => {
+    console.log('Tài khoản không tồn tại!');
+    return done(null, false);
+  })
+});
 
 //Lắng nghe kết nối tới Server
 io.on("connection", function(socket){
@@ -69,66 +127,5 @@ io.on("connection", function(socket){
     })
     .catch(err=> console.log(err.message))
   });
-  socket.on("login_sendData_user", function(data){
-    USER.findAll({where:{ username: data}})
-    .then(arrUS => {
-        socket.emit("server_sendData_user", arrUS);
-        console.log(arrUS);
-    })
-    .catch(err=> {
-      socket.emit("server_sendData_user", "emty");
-    })
-  });
-});
-
-//Trang private
-app.get('/',(req, res) => {
-  if(req.isAuthenticated()){
-    TINH.findAll({raw: true})
-    .then(arrTINH => {
-      res.render('index.ejs', {data1: arrTINH});
-    })
-    .catch(err=> console.log(err.message))
-  }else {
-    res.redirect('/login');
-  }
-});
-
-//Điều hướng route
-app.route('/login')
-.get((req, res) => res.render('login'))
-.post(Passport.authenticate('local',{failureRedirect: '/login', successRedirect: '/'}))
-
-//Kiểm tra chứng thực user
-Passport.use(new LocalStrategy((username, password, done) => {
-  USER.findOne({where:{username: username}})
-  .then(USER => {
-    //code
-    if(USER.password == password){
-      console.log("Password chính xác!");
-      return done(null, USER.username);
-    }else {
-        console.log("Password không chính xác!");
-        return done(null, false);
-    }
-  })
-  .catch(err => {
-    console.log('Tài khoản không tồn tại!');
-    return done(null, false);
-  })
-}));
-
-Passport.serializeUser((user, done) =>{
-  done(null, user);
-})
-Passport.deserializeUser(function(name, done) {
-  USER.findOne({where:{username: name}})
-  .then(USER => {
-    //code
-    return done(null, USER.username);
-  })
-  .catch(err => {
-    console.log('Tài khoản không tồn tại!');
-    return done(null, false);
-  })
+  socket.emit("server_sendData_login", temp);
 });

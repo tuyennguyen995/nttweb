@@ -8,45 +8,41 @@
   <script src="jquery-3.3.1.min.js"></script>
   <!-- Kết nối socket.io -->
   <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
-</head>
-<body>
-  <form action="" method="POST" enctype="application/x-www-form-urlencoded" onSubmit="return checkPw(this)">
-    <input type="text" name="username" placeholder="Tên đăng nhập" autocomplete="off">
-    <input type="password" name="password" placeholder="Mật khẩu" autocomplete="off">
-    <input type="submit" name="btnlogin" value="Đăng nhập">
-  </form>
-
+  <script type="text/javascript">
+    const socket = io("https://nttweb.herokuapp.com");
+    socket.on("server_sendData_login", function(data){
+      if(data == 0){
+        alert("Tài khoản không tồn tại!")
+      }
+      if(data == -1){
+        alert("Mật khẩu không chính xác!")
+      }
+    })
+  </script>
   <script type="text/javascript">
     function checkPw(form) {
     user = form.username.value;
     pw1 = form.password.value;
 
-    const socket = io("https://nttweb.herokuapp.com");
-    socket.emit("login_sendData_user",user);
-    socket.on("server_sendData_user", function(data){
-      console.log(data);
-      if(user==""){
-        alert ("\nTên đăng nhập không được để trống!");
-        return false;
-      }
-      if (pw1 == "") {
-        alert ("\nMật khẩu không được để trống!");
-        return false;
-      }
-       if (data == "emty") {
-         alert ("\nTài khoản không tồn tại!");
-         return false;
-      }
-      if(data.username == user){
-        if(data.password == pw1){
-          return true;
-        }else {
-          alert ("\nMật khẩu không chính xác!");
-          return false;
-        }
-      }
-    });
+    if(user==""){
+      alert ("\nTên đăng nhập không được để trống!");
+      return false;
+    }
+    else if (pw1 == "") {
+      alert ("\nMật khẩu không được để trống!");
+      return false;
+    } else {
+      return true;
+    }
   }
   </script>
+</head>
+<body>
+  <form action="" method="POST" enctype="application/x-www-form-urlencoded" onsubmit="return checkPw(this);">
+    <input type="text" name="username" placeholder="Tên đăng nhập" autocomplete="off" >
+    <input type="password" name="password" placeholder="Mật khẩu" autocomplete="off">
+    <input type="submit" name="btnlogin" value="Đăng nhập">
+  </form>
+
 </body>
 </html>
