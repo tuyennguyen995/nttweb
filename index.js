@@ -49,7 +49,7 @@ app.get('/admin',(req, res) => {
   if(req.isAuthenticated()){
     USER.findOne({where:{username: req.user}})
     .then(USER => {
-      res.render('index_ad', {data: USER});
+      res.render('admin/index_ad', {data: USER});
     })
   }else {
       res.redirect('/login');
@@ -124,4 +124,8 @@ io.on("connection", function(socket){
   // });
   socket.emit("server_sendData_login", temp);
   temp = 0;
+  USER.findAll({raw: true})
+  .then(arrUSER => {
+    socket.emit("server_sendData_dsUser", arrUSER);
+  })
 });
