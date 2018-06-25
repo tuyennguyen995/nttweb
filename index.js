@@ -12,7 +12,7 @@ app.set('views', './views');
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(session({ secret: 'secret', name: 'cookie_dangnhap', cookie:{maxAge: 1000*60*3}, proxy: true, resave: true, saveUninitialized: true}));
+app.use(session({ secret: 'secret', name: 'cookie_dangnhap', cookie:{maxAge: 1000*60*5}, proxy: true, resave: true, saveUninitialized: true}));
 app.use(Passport.initialize());
 app.use(Passport.session());
 app.use(express.static("public"));
@@ -44,27 +44,22 @@ const PHUONG_XA = config.define('PHUONG_XA',{
 //Đồng bộ với sql
 config.sync();
 
-app.get("/login", function(req, res){
-  res.render("login.ejs")
-})
-
 //Trang private
-app.get('/',(req, res) => {
+app.get('/admin',(req, res) => {
   if(req.isAuthenticated()){
-    TINH.findAll({raw: true})
-    .then(arrTINH => {
-      res.render('index.ejs', {data1: arrTINH});
+    USER.findOne({where:{username: req.user}})
+    .then(USER => {
+      res.render('index_ad', {data: USER});
     })
-    .catch(err=> console.log(err.message))
   }else {
-    res.redirect('/login');
+      res.redirect('/login');
   }
 });
 
 //Điều hướng route
 app.route('/login')
-.get((req, res) => res.render('login'))
-.post(Passport.authenticate('local',{failureRedirect: '/login',successRedirect: '/'}))
+.get((req, res) => res.render('login.ejs'))
+.post(Passport.authenticate('local',{failureRedirect: '/login',successRedirect: '/admin'}))
 
 //Kiểm tra chứng thực user
 Passport.use(new LocalStrategy((username, password, done) => {
@@ -108,25 +103,25 @@ io.on("connection", function(socket){
   socket.on("disconnect", function(){
     console.log(socket.id +" ngắt kết nối!!");
   });
-  socket.on("trangchu_sendData_QH", function(data){
+  //socket.on("trangchu_sendData_QH", function(data){
     //Gửi về cho tất cả người dùng
     //io.sockets.emit("server_send_data", data+"8989");
     //Gửi về cho tất cả người dùng nhưng k gửi lại người đã gửi
     //io.broadcast.emit("server_send_data", data+"8989");
     //Gửi về cho người đã send
-    QUAN_HUYEN.findAll({where:{ TINH: data}})
-    .then(arrQH => {
-        socket.emit("server_sendData_QH", arrQH);
-    })
-    .catch(err=> console.log(err.message))
-  });
-  socket.on("trangchu_sendData_PX", function(data){
-    PHUONG_XA.findAll({where:{ MA_QUAN_HUYEN: data}})
-    .then(arrPX => {
-        socket.emit("server_sendData_PX", arrPX);
-    })
-    .catch(err=> console.log(err.message))
-  });
+  //   QUAN_HUYEN.findAll({where:{ TINH: data}})
+  //   .then(arrQH => {
+  //       socket.emit("server_sendData_QH", arrQH);
+  //   })
+  //   .catch(err=> console.log(err.message))
+  // });
+  // socket.on("trangchu_sendData_PX", function(data){
+  //   PHUONG_XA.findAll({where:{ MA_QUAN_HUYEN: data}})
+  //   .then(arrPX => {
+  //       socket.emit("server_sendData_PX", arrPX);
+  //   })
+  //   .catch(err=> console.log(err.message))
+  // });
   socket.emit("server_sendData_login", temp);
   temp = 0;
 });

@@ -27,7 +27,7 @@
     <!-- Kết nối socket.io -->
     <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
     <script type="text/javascript">
-      const socket = io("https://nttweb.herokuapp.com");
+      const socket = io("http://localhost:3000/");
       socket.on("server_sendData_login", function(data){
         if(data == 1){
           alert("Tài khoản không tồn tại!")
@@ -40,7 +40,10 @@
 
 </head>
 
-<body bgimage="image/bg.jpg">
+<body style="  background-image: url('../../image/bg.jpg');
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover ;">
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
