@@ -56,7 +56,23 @@ app.get('/admin',(req, res) => {
   }
 });
 
-//Điều hướng route
+//Điều hướng route login
+app.route('/login')
+.get((req, res) => res.render('login.ejs'))
+.post(Passport.authenticate('local',{failureRedirect: '/login',successRedirect: '/admin'}))
+
+//Điều hướng route edit user
+app.route('/admin/edit/:id')
+.get((req, res) => {
+  var i = req.params.id;
+  USER.findOne({where:{id: i}})
+  .then(USER => {
+    res.render("admin/edit.ejs",{data: USER});
+  })
+})
+.post(Passport.authenticate('local',{failureRedirect: '/login',successRedirect: '/admin'}))
+
+
 app.route('/login')
 .get((req, res) => res.render('login.ejs'))
 .post(Passport.authenticate('local',{failureRedirect: '/login',successRedirect: '/admin'}))
