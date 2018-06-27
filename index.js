@@ -23,11 +23,14 @@ const config = require('./db.js');
 config.authenticate()
 .then(() => console.log("Connected!"))
 .catch(err => console.log(err.message))
+
 var temp = 0;
+var urlencodedParser = bodyParser.urlencoded({extended: false});
 //Tao bảng trong sql
 const USER = config.define('USER',{
   username: sequelize.STRING,
-  password: sequelize.STRING
+  password: sequelize.STRING,
+  info_user: sequelize.INTEGER
 })
 const TINH = config.define('TINH',{
   TEN_TINH: sequelize.STRING
@@ -40,6 +43,16 @@ const QUAN_HUYEN = config.define('QUAN_HUYEN',{
 const PHUONG_XA = config.define('PHUONG_XA',{
   TEN_PHUONG_XA: sequelize.STRING,
   MA_QUAN_HUYEN: sequelize.INTEGER
+})
+
+const INFO_USER = config.define('INFO_USER',{
+  HOTEN: sequelize.STRING,
+  GIOITINH: sequelize.STRING,
+  NGAYSINH: sequelize.DATE,
+  CMND: sequelize.STRING,
+  SDT: sequelize.STRING,
+  MAIL: sequelize.STRING,
+  COQUAN: sequelize.INTEGER
 })
 //Đồng bộ với sql
 config.sync();
@@ -62,16 +75,79 @@ app.route('/login')
 .post(Passport.authenticate('local',{failureRedirect: '/login',successRedirect: '/admin'}))
 
 //Điều hướng route edit user
-app.route('/admin/edit/:id')
-.get((req, res) => {
+app.get('/admin/edit/:id',function(req, res){
+    if(req.isAuthenticated()){
+      var i = req.params.id;
+      USER.findOne({where:{id: i}})
+      .then(USER => {
+        res.render("admin/edit.ejs",{data: USER});
+      })
+    }else {
+      res.redirect('/login');
+    }
+
+})
+app.post('/admin/edit/:id',urlencodedParser, function(req, res){
   var i = req.params.id;
-  USER.findOne({where:{id: i}})
-  .then(USER => {
-    res.render("admin/edit.ejs",{data: USER});
+  var user = req.body.us;
+  var pass = req.body.pw;
+
+  USER.update({
+    username: user,
+    password: pass
+  },{
+    where: {id: i}
+  }).then(row => {
+    res.redirect('/admin')
   })
 })
-.post(Passport.authenticate('local',{failureRedirect: '/login',successRedirect: '/admin'}))
 
+app.get('/admin/delete/:id',function(req, res){
+    if(req.isAuthenticated()){
+      var i = req.params.id;
+      USER.destroy({where: {id: i}})
+      .then(row =>{
+        res.redirect('/admin');
+      })
+    }else {
+      res.redirect('/login');
+    }
+  })
+
+app.get('/admin/create',function(req, res){
+      if(req.isAuthenticated()){
+        res.render("admin/create",{data: req.user});
+      }else {
+        res.redirect('/login');
+      }
+})
+
+app.post('/admin/create',urlencodedParser, function(req, res){
+  var user = req.body.us;
+  var pass = req.body.pw;
+  var us = -1;
+  USER.findOne({where:{username: user}})
+  .then(sUSER => {
+    if(sUSER != ""){
+      us = 1;
+
+    }else{
+      us = 0;
+      temp = -2;
+    }
+    console.log(sUSER);
+  })
+  if(us == 0){
+    res.redirect('/admin/create');
+  }else {
+    USER.create({
+      username: user,
+      password: pass
+    }).then(row => {
+      res.redirect('/admin')
+    })
+  }
+})
 
 app.route('/login')
 .get((req, res) => res.render('login.ejs'))
@@ -138,7 +214,7 @@ io.on("connection", function(socket){
   //   })
   //   .catch(err=> console.log(err.message))
   // });
-  socket.emit("server_sendData_login", temp);
+  socket.emit("server_sendData_info", temp);
   temp = 0;
   USER.findAll({raw: true})
   .then(arrUSER => {

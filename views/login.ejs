@@ -28,7 +28,7 @@
     <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
     <script type="text/javascript">
       const socket = io("http://localhost:3000/");
-      socket.on("server_sendData_login", function(data){
+      socket.on("server_sendData_info", function(data){
         if(data == 1){
           alert("Tài khoản không tồn tại!")
         }
@@ -67,7 +67,7 @@
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
                                 <p><a href="#" >Quên mật khẩu?</a></p>
-                                <input type="submit" name="btnlogin" class="btn btn-success btn-block" value="Đăng nhập" style="float: right;">
+                                <input type="submit" name="btnlogin" class="btn btn-success btn-block" value="Đăng nhập">
                             </fieldset>
                         </form>
                     </div>
