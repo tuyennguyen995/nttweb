@@ -30,19 +30,27 @@ var urlencodedParser = bodyParser.urlencoded({extended: false});
 const USER = config.define('USER',{
   username: sequelize.STRING,
   password: sequelize.STRING,
-  info_user: sequelize.INTEGER
+  info_user: sequelize.INTEGER,
+  coquan: sequelize.INTEGER,
+  trangthai: sequelize.INTEGER
 })
+
+const TRANGTHAI = config.define('TRANGTHAI',{
+  TEN_TRANGTHAI: sequelize.STRING,
+  APDUNG: sequelize.STRING
+})
+
 const TINH = config.define('TINH',{
   TEN_TINH: sequelize.STRING
 })
 
 const QUAN_HUYEN = config.define('QUAN_HUYEN',{
   TEN_QUAN_HUYEN: sequelize.STRING,
-  TINH: sequelize.INTEGER
+  ma_tinh: sequelize.INTEGER
 })
 const PHUONG_XA = config.define('PHUONG_XA',{
   TEN_PHUONG_XA: sequelize.STRING,
-  MA_QUAN_HUYEN: sequelize.INTEGER
+  ma_quan_huyen: sequelize.INTEGER
 })
 
 const INFO_USER = config.define('INFO_USER',{
@@ -51,8 +59,15 @@ const INFO_USER = config.define('INFO_USER',{
   NGAYSINH: sequelize.DATE,
   CMND: sequelize.STRING,
   SDT: sequelize.STRING,
-  MAIL: sequelize.STRING,
-  COQUAN: sequelize.INTEGER
+  MAIL: sequelize.STRING
+})
+
+const COQUAN = config.define('COQUAN',{
+  MA_COQUAN: sequelize.STRING,
+  TEN_COQUAN: sequelize.STRING,
+  BOPHAN: sequelize.STRING,
+  DIACHI_SO: sequelize.STRING,
+  ma_diachi: sequelize.INTEGER
 })
 //Đồng bộ với sql
 config.sync();
@@ -216,8 +231,8 @@ io.on("connection", function(socket){
   // });
   socket.emit("server_sendData_info", temp);
   temp = 0;
-  USER.findAll({raw: true})
-  .then(arrUSER => {
-    socket.emit("server_sendData_dsUser", arrUSER);
+  config.query('SELECT * FROM public."USER" as a, public."INFO_USER" as b, public."TRANGTHAI" as c, public."COQUAN" as d, public."PHUONG_XA" as e, public."QUAN_HUYEN" as f, public."TINH" as g where a.info_user = b.id and a.trangthai = c.id and a.coquan = d.id and d.ma_diachi = e.id and e.ma_quan_huyen = f.id and f.ma_tinh = g.id')
+  .then(arr => {
+    socket.emit("server_sendData_dsUser", arr);
   })
 });
