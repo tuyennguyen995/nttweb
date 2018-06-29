@@ -59,7 +59,9 @@ const INFO_USER = config.define('INFO_USER',{
   NGAYSINH: sequelize.DATE,
   CMND: sequelize.STRING,
   SDT: sequelize.STRING,
-  MAIL: sequelize.STRING
+  MAIL: sequelize.STRING,
+  NGAYCAP: sequelize.DATE,
+  NOICAP: sequelize.STRING
 })
 
 const COQUAN = config.define('COQUAN',{
@@ -131,15 +133,35 @@ app.get('/admin/delete/:id',function(req, res){
 
 app.get('/admin/create',function(req, res){
       if(req.isAuthenticated()){
-        res.render("admin/create",{data: req.user});
+        TINH.findAll({raw: true})
+        .then(arrTinh =>{
+          res.render("admin/create",{data: req.user, data1: arrTinh});
+        })
       }else {
         res.redirect('/login');
       }
 })
 
 app.post('/admin/create',urlencodedParser, function(req, res){
+  //Bảng user
   var user = req.body.us;
   var pass = req.body.pw;
+  //Bảng cơ quan
+  diachi = req.body.diachi;
+  phuong = req.body.phuongxa;
+  bophan = req.body.bophan;
+  coquan = req.body.tencoquan;
+  macoquan = req.body.macoquan;
+  //BẢng info_user
+  mail = req.body.mail;
+  sdt = req.body.sdt;
+  noicap = req.body.noicap;
+  ngaycap = req.body.ngaycap;
+  cmnd = req.body.cmnd;
+  ngaysinh = req.body.ngaysinh;
+  gioitinh = req.body.gioitinh;
+  hoten = req.body.hoten;
+
   var us = -1;
   USER.findOne({where:{username: user}})
   .then(sUSER => {
@@ -150,16 +172,40 @@ app.post('/admin/create',urlencodedParser, function(req, res){
       us = 0;
       temp = -2;
     }
-    console.log(sUSER);
   })
   if(us == 0){
     res.redirect('/admin/create');
   }else {
-    USER.create({
-      username: user,
-      password: pass
-    }).then(row => {
-      res.redirect('/admin')
+    COQUAN.create({
+      MA_COQUAN: macoquan,
+      TEN_COQUAN: coquan,
+      BOPHAN: bophan,
+      DIACHI_SO: diachi,
+      ma_diachi: phuong
+    })
+    .then(cq =>{
+      INFO_USER.create({
+        HOTEN: hoten,
+        GIOITINH: gioitinh,
+        NGAYSINH: ngaysinh,
+        CMND: cmnd,
+        SDT: sdt,
+        MAIL: mail,
+        NGAYCAP: ngaycap,
+        NOICAP: noicap
+      })
+      .then(info =>{
+        USER.create({
+          username: user,
+          password: pass,
+          info_user: info.id,
+          coquan: cq.id,
+          trangthai: 2
+        })
+        .then(row => {
+          res.redirect('/admin')
+        })
+      })
     })
   }
 })
@@ -210,25 +256,25 @@ io.on("connection", function(socket){
   socket.on("disconnect", function(){
     console.log(socket.id +" ngắt kết nối!!");
   });
-  //socket.on("trangchu_sendData_QH", function(data){
-    //Gửi về cho tất cả người dùng
-    //io.sockets.emit("server_send_data", data+"8989");
-    //Gửi về cho tất cả người dùng nhưng k gửi lại người đã gửi
-    //io.broadcast.emit("server_send_data", data+"8989");
-    //Gửi về cho người đã send
-  //   QUAN_HUYEN.findAll({where:{ TINH: data}})
-  //   .then(arrQH => {
-  //       socket.emit("server_sendData_QH", arrQH);
-  //   })
-  //   .catch(err=> console.log(err.message))
-  // });
-  // socket.on("trangchu_sendData_PX", function(data){
-  //   PHUONG_XA.findAll({where:{ MA_QUAN_HUYEN: data}})
-  //   .then(arrPX => {
-  //       socket.emit("server_sendData_PX", arrPX);
-  //   })
-  //   .catch(err=> console.log(err.message))
-  // });
+  socket.on("trangchu_sendData_QH", function(data){
+    // Gửi về cho tất cả người dùng
+    // io.sockets.emit("server_send_data", data+"8989");
+    // Gửi về cho tất cả người dùng nhưng k gửi lại người đã gửi
+    // io.broadcast.emit("server_send_data", data+"8989");
+    // Gửi về cho người đã send
+    QUAN_HUYEN.findAll({where:{ ma_tinh: data}})
+    .then(arrQH => {
+        socket.emit("server_sendData_QH", arrQH);
+    })
+    .catch(err=> console.log(err.message))
+  });
+  socket.on("trangchu_sendData_PX", function(data){
+    PHUONG_XA.findAll({where:{ ma_quan_huyen: data}})
+    .then(arrPX => {
+        socket.emit("server_sendData_PX", arrPX);
+    })
+    .catch(err=> console.log(err.message))
+  });
   socket.emit("server_sendData_info", temp);
   temp = 0;
   config.query('SELECT * FROM public."USER" as a, public."INFO_USER" as b, public."TRANGTHAI" as c, public."COQUAN" as d, public."PHUONG_XA" as e, public."QUAN_HUYEN" as f, public."TINH" as g where a.info_user = b.id and a.trangthai = c.id and a.coquan = d.id and d.ma_diachi = e.id and e.ma_quan_huyen = f.id and f.ma_tinh = g.id')
