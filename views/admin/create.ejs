@@ -596,14 +596,6 @@
     }
     </script>
     <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
-    <script type="text/javascript">
-      const socket = io("http://localhost:3000/");
-      socket.on("server_sendData_info", function(data){
-        if(data == -2){
-          alert("Tên đăng nhập đã tồn tại!")
-        }
-      })
-    </script>
     <script>
       function getSelect1(){
         var temp = "";

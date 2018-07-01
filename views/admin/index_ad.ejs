@@ -411,9 +411,8 @@
       <script type="text/javascript">
         const socket = io("http://localhost:3000/");
         socket.on("server_sendData_dsUser", function(data){
-          console.log(data);
-          console.log(data[0][0]);
           for(var i = 0; i < data[0].length; i++){
+            console.log(data[0][i]);
             $('#data_user').append("<tr>"+
                                     "<td>"+data[0][i].TEN_TRANGTHAI+"</td>"+
                                     "<td>"+data[0][i].username+"</td>"+

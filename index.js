@@ -18,6 +18,7 @@ app.use(Passport.session());
 app.use(express.static("public"));
 
 const sequelize = require('sequelize');
+const Op = sequelize.Op;
 const config = require('./db.js');
 //Kiểm tra kết nối
 config.authenticate()
@@ -39,7 +40,7 @@ const TRANGTHAI = config.define('TRANGTHAI',{
   TEN_TRANGTHAI: sequelize.STRING,
   APDUNG: sequelize.STRING
 })
-
+ 
 const TINH = config.define('TINH',{
   TEN_TINH: sequelize.STRING
 })
@@ -56,7 +57,7 @@ const PHUONG_XA = config.define('PHUONG_XA',{
 const INFO_USER = config.define('INFO_USER',{
   HOTEN: sequelize.STRING,
   GIOITINH: sequelize.STRING,
-  NGAYSINH: sequelize.DATE,
+  NGAYSINH: sequelize.TEXT,
   CMND: sequelize.STRING,
   SDT: sequelize.STRING,
   MAIL: sequelize.STRING,
@@ -93,21 +94,50 @@ app.route('/login')
 
 //Điều hướng route edit user
 app.get('/admin/edit/:id',function(req, res){
-    if(req.isAuthenticated()){
+  var gioitinhs = "";
+     if(req.isAuthenticated()){
       var i = req.params.id;
-      USER.findOne({where:{id: i}})
-      .then(USER => {
-        res.render("admin/edit.ejs",{data: USER});
+      config.query('SELECT * FROM public."USER" as a, public."INFO_USER" as b, public."TRANGTHAI" as c, public."COQUAN" as d, public."PHUONG_XA" as e, public."QUAN_HUYEN" as f, public."TINH" as g where a.info_user = b.id and a.trangthai = c.id and a.coquan = d.id and d.ma_diachi = e.id and e.ma_quan_huyen = f.id and f.ma_tinh = g.id and a.id ='+ i)
+      .then(arr => {
+        TINH.findAll({where:{id: {[Op.ne]:  arr[0][0].ma_tinh}}})
+        .then(arrTinh =>{
+          QUAN_HUYEN.findAll({where:{[Op.and]: [{id: {[Op.ne]:  arr[0][0].ma_quan_huyen}},{ma_tinh: arr[0][0].ma_tinh}]}})
+          .then(arrqh =>{
+            PHUONG_XA.findAll({where:{[Op.and]: [{id: {[Op.ne]:  arr[0][0].ma_diachi}},{ma_quan_huyen: arr[0][0].ma_quan_huyen}]}})
+            .then(arrpx =>{
+              if(arr[0][0].GIOITINH == "Nam"){
+                gioitinhs = "Nữ";
+              }else {
+                gioitinhs = "Nam";
+              }
+              res.render("admin/edit.ejs",{data1: arr, data2: arrqh, data3: arrpx,data4: arrTinh, data: req.user, gt: gioitinhs});
+            })
+          })
+        })
       })
     }else {
       res.redirect('/login');
     }
-
 })
 app.post('/admin/edit/:id',urlencodedParser, function(req, res){
   var i = req.params.id;
   var user = req.body.us;
   var pass = req.body.pw;
+  //Bảng cơ quan
+  diachi = req.body.diachi;
+  phuong = req.body.phuongxa;
+  bophan = req.body.bophan;
+  coquan = req.body.tencoquan;
+  macoquan = req.body.macoquan;
+  //BẢng info_user
+  mail = req.body.mail;
+  sdt = req.body.sdt;
+  noicap = req.body.noicap;
+  ngaycap = req.body.ngaycap;
+  cmnd = req.body.cmnd;
+  ngaysinh = req.body.ngaysinh;
+  gioitinh = req.body.gioitinh;
+  hoten = req.body.hoten;
 
   USER.update({
     username: user,
@@ -277,7 +307,7 @@ io.on("connection", function(socket){
   });
   socket.emit("server_sendData_info", temp);
   temp = 0;
-  config.query('SELECT * FROM public."USER" as a, public."INFO_USER" as b, public."TRANGTHAI" as c, public."COQUAN" as d, public."PHUONG_XA" as e, public."QUAN_HUYEN" as f, public."TINH" as g where a.info_user = b.id and a.trangthai = c.id and a.coquan = d.id and d.ma_diachi = e.id and e.ma_quan_huyen = f.id and f.ma_tinh = g.id')
+  config.query('SELECT * FROM public."INFO_USER" as b, public."TRANGTHAI" as c, public."COQUAN" as d, public."PHUONG_XA" as e, public."QUAN_HUYEN" as f, public."TINH" as g,  public."USER" as a where a.info_user = b.id and a.trangthai = c.id and a.coquan = d.id and d.ma_diachi = e.id and e.ma_quan_huyen = f.id and f.ma_tinh = g.id')
   .then(arr => {
     socket.emit("server_sendData_dsUser", arr);
   })
