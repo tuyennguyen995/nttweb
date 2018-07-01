@@ -598,6 +598,13 @@
     <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
     <script>
       function getSelect1(){
+        //Thông báo kiểm tra tên user có tồn tại chưa
+        const socket = io("http://localhost:3000/");
+        socket.on("server_sendData_info", function(data){
+          if(data == -2){
+            alert("Tên tài khoản đã tồn tại!")
+          }
+        })
         var temp = "";
         var Sel1 = document.getElementById("list1").value;
         if(Sel1 == ""){
@@ -605,7 +612,6 @@
           document.getElementById('list3').style.visibility = 'hidden';
         }else if(Sel1 != null) {
           //Xử lý khi chọn select
-          const socket = io("http://localhost:3000/");
           socket.emit("trangchu_sendData_QH",Sel1);
           socket.on("server_sendData_QH", function(data){
             $('#quanhuyen').html("<option value='"+temp+"'>-- Chọn Quận/Huyện --</option>");

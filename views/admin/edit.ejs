@@ -394,27 +394,27 @@
                             </div>
                             <div class="form-group col-md-4" style="margin-left: 5px;">
                               <label>Ngày sinh *</label>
-                              <input id="ngaysinh" class="form-control" value="<%= data1[0][0].HOTEN%>" name="ngaysinh" type="date" autofocus autocomplete="off">
+                              <input id="ngaysinh" class="form-control" value="<%= ns[0][0].to_char%>"  name="ngaysinh" type="date" autofocus autocomplete="off">
                             </div>
                             <div class="form-group col-md-4" style="margin-left: 5px;">
                               <label>Số CMND *</label>
-                              <input id="cmnd" class="form-control" placeholder="Nhập CMND" name="cmnd" type="text" autofocus autocomplete="off">
+                              <input id="cmnd" class="form-control" value="<%= data1[0][0].CMND%>" name="cmnd" type="text" autofocus autocomplete="off">
                             </div>
                             <div class="form-group col-md-4" style="margin-left: 5px;">
                               <label>Ngày cấp *</label>
-                              <input id="ngaycap" class="form-control" placeholder="Nhập ngày cấp" name="ngaycap" type="date" autofocus autocomplete="off">
+                              <input id="ngaycap" class="form-control" value="<%= nc[0][0].to_char%>" name="ngaycap" type="date" autofocus autocomplete="off">
                             </div>
                             <div class="form-group col-md-4" style="margin-left: 5px;">
                               <label>Nơi cấp *</label>
-                              <input id="noicap" class="form-control" placeholder="Nhập nơi cấp" name="noicap" type="rext" autofocus autocomplete="off">
+                              <input id="noicap" class="form-control" value="<%= data1[0][0].NOICAP%>" name="noicap" type="rext" autofocus autocomplete="off">
                             </div>
                             <div class="form-group col-md-4" style="margin-left: 5px;">
                               <label>Số điện thoại *</label>
-                              <input id="sdt" class="form-control" placeholder="Nhập số điện thoại" name="sdt" type="text" autofocus autocomplete="off">
+                              <input id="sdt" class="form-control" value="<%= data1[0][0].SDT%>" name="sdt" type="text" autofocus autocomplete="off">
                             </div>
                             <div class="form-group col-md-4" style="margin-left: 5px;">
                               <label>E-Mail</label>
-                              <input id="mail" class="form-control" placeholder="Nhập Email" name="mail" type="email" autofocus autocomplete="off">
+                              <input id="mail" class="form-control" value="<%= data1[0][0].MAIL%>" name="mail" type="email" autofocus autocomplete="off">
                             </div>
                           </div>
                         </div>
@@ -430,15 +430,15 @@
                           <div class="row">
                               <div class="form-group col-md-4" style="margin-left: 5px;">
                                 <label>Mã Cơ quan</label>
-                                <input id="macoquan" class="form-control" placeholder="Nhập Mã cơ quan" name="macoquan" type="text" autofocus autocomplete="off">
+                                <input id="macoquan" class="form-control" value="<%= data1[0][0].MA_COQUAN%>" name="macoquan" type="text" autofocus autocomplete="off">
                               </div>
                               <div class="form-group col-md-4" style="margin-left: 5px;">
                                 <label>Tên Cơ quan *</label>
-                                <input id="tencoquan" class="form-control" placeholder="Nhập Tên cơ quan" name="tencoquan" type="text" autofocus autocomplete="off">
+                                <input id="tencoquan" class="form-control" value="<%= data1[0][0].TEN_COQUAN%>" name="tencoquan" type="text" autofocus autocomplete="off">
                               </div>
                               <div class="form-group col-md-4" style="margin-left: 5px;">
                                 <label>Bộ phận</label>
-                                <input id="bophan" class="form-control" placeholder="Nhập Bộ phận" name="bophan" type="text" autofocus autocomplete="off">
+                                <input id="bophan" class="form-control" value="<%= data1[0][0].BOPHAN%>" name="bophan" type="text" autofocus autocomplete="off">
                               </div>
                               <div class="form-group col-md-4" style="margin-left: 5px;">
                                 <label for="tinhthanh">Tỉnh thành </label>
@@ -473,7 +473,7 @@
                               </div>
                               <div class="form-group col-md-4" style="margin-left: 5px;">
                                 <label>Địa chỉ (Số/Đường/Khóm/Ấp) *</label>
-                                <input id="diachi" class="form-control" placeholder="Nhập Số/Đường/Khóm/Ấp" name="diachi" type="text" autofocus autocomplete="off">
+                                <input id="diachi" class="form-control" value="<%= data1[0][0].DIACHI_SO%>" name="diachi" type="text" autofocus autocomplete="off">
                               </div>
                           </div>
                         </div>
@@ -488,22 +488,31 @@
                           <div class="row">
                               <div class="form-group col-md-4" style="margin-left: 5px;">
                                   <label>Tên Đăng nhập</label>
-                                  <input id="us" class="form-control" value="<%= data1.username%>" name="us" type="text" autofocus autocomplete="off">
+                                  <input id="us" class="form-control" value="<%= data1[0][0].username%>" name="us" type="text" autofocus autocomplete="off">
                               </div>
                               <div class="form-group col-md-4" style="margin-left: 5px;">
                                 <label>Mật khẩu</label>
-                                <input class="form-control" placeholder="Mật khẩu" name="pw" type="password" autofocus autocomplete="off">
+                                <input class="form-control" value="<%= data1[0][0].password%>" name="pw" type="password" autofocus autocomplete="off">
                               </div>
                               <div class="form-group col-md-4" style="margin-left: 5px;">
                                 <label>Xác nhận mật khẩu</label>
-                                <input class="form-control" placeholder="Nhập lại mật khẩu" name="pws" type="password" autofocus autocomplete="off">
+                                <input class="form-control" value="<%= data1[0][0].password%>" name="pws" type="password" autofocus autocomplete="off">
+                              </div>
+                              <div class="form-group col-md-4" style="margin-left: 5px;">
+                                <label>Trạng thái</label>
+                                <select class="form-control" name="tthai">
+                                  <option value="<%= data1[0][0].trangthai%>"><%= data1[0][0].TEN_TRANGTHAI%></option>
+                                  <% tt.forEach(function(ds){ %>
+                                      <option value='<%= ds.id%>'><%= ds.TEN_TRANGTHAI%></option>
+                                  <%})%>
+                                </select>
                               </div>
                           </div>
                         </div>
                       </div>
                     </div>
                     <div class="col-md-12">
-                      <input style="float: right" type="submit" value="Tạo tài khoản" class="btn btn-success" />
+                      <input style="float: right" type="submit" value="Cập nhật" class="btn btn-primary" />
                       <a style="float: right; margin-right: 4px; margin-bottom: 20px;" href="/Admin" class="btn btn-default">Hủy</a>
                     </div>
                   </div>
@@ -603,6 +612,13 @@
     </script>
     <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
     <script>
+      const socket = io("http://localhost:3000/");
+      socket.on("server_sendData_info", function(data){
+        if(data == -2){
+          alert("Tên tài khoản đã tồn tại!")
+        }
+      })
+
       function getSelect1(){
         var temp = "";
         var Sel1 = document.getElementById("list1").value;
@@ -611,7 +627,6 @@
           document.getElementById('list3').style.visibility = 'hidden';
         }else if(Sel1 != null) {
           //Xử lý khi chọn select
-          const socket = io("http://localhost:3000/");
           socket.emit("trangchu_sendData_QH",Sel1);
           socket.on("server_sendData_QH", function(data){
             $('#quanhuyen').html("<option value='"+temp+"'>-- Chọn Quận/Huyện --</option>");
