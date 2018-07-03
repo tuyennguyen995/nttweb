@@ -220,7 +220,7 @@
     <script>
       function getSelect1(){
         //Thông báo kiểm tra tên user có tồn tại chưa
-        const socket = io("http://localhost:3000/");
+        const socket = io("https://nttweb.herokuapp.com/");
         socket.on("server_sendData_info", function(data){
           if(data == -2){
             alert("Tên tài khoản đã tồn tại!")
@@ -257,7 +257,7 @@
       }else if(Sel1 != null) {
         //Xử lý khi chọn select
         //Khi up ken heruku nho thay doi địc chỉ này
-        const socket = io("http://localhost:3000/");
+        const socket = io("https://nttweb.herokuapp.com/");
         socket.emit("trangchu_sendData_PX",Sel1);
         socket.on("server_sendData_PX", function(data){
           $('#phuongxa').html('<option value = "">-- Chọn Phường/Xã --</option>');

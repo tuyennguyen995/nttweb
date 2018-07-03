@@ -39,7 +39,7 @@
 </div>
   <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
       <script type="text/javascript">
-        const socket = io("http://localhost:3000/");
+        const socket = io("https://nttweb.herokuapp.com/");
         socket.on("server_sendData_dsUser", function(data){
           for(var i = 0; i < data[0].length; i++){
             console.log(data[0][i]);
