@@ -1,0 +1,62 @@
+
+
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Quản lý tài khoản</h1>
+                <p>
+                    <a class="btn btn-primary" href="/admin/create">Thêm tài khoản</a>
+                </p>
+                <table class="table">
+                  <tbody id="data_user">
+                    <tr>
+                        <th>
+                            Trạng thái
+                        </th>
+                        <th>
+                            Cơ quan
+                        </th>
+                        <th>
+                            Địa chỉ
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                  </tbody>
+                </table>
+                        <!-- /.col-lg-12 -->
+            </div>
+        </div>
+                <!-- /.row -->
+    </div>
+            <!-- /.container-fluid -->
+  </div>
+        <!-- /#page-wrapper -->
+</div>
+  <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
+      <script type="text/javascript">
+        const socket = io("http://localhost:3000/");
+        socket.on("server_sendData_dsUser", function(data){
+          for(var i = 0; i < data[0].length; i++){
+            console.log(data[0][i]);
+            $('#data_user').append("<tr>"+
+                                    "<td>"+data[0][i].TEN_TRANGTHAI+"</td>"+
+                                    "<td>"+data[0][i].TEN_COQUAN+"</td>"+
+                                    "<td>"+data[0][i].DIACHI_SO+", "+data[0][i].TEN_PHUONG_XA+", "+data[0][i].TEN_QUAN_HUYEN+", "+data[0][i].TEN_TINH+"</td>"+
+                                    '<td><a href="../admin/taikhoan/view/'+data[0][i].id+'" class="fa  fa-eye fa-fw">Xem</a>'+"</td>"+
+                                    '<td>&nbsp&nbsp|</td>"'+
+                                    '<td><a href="../admin/taikhoan/edit/'+data[0][i].id+'" class="fa fa-edit fa-fw">Sửa</a>'+"</td>"+
+                                    '<td>&nbsp|</td>"'+
+                                    '<td><a onclick= "return confirm('
+                                    +"'Bạn có chắc muốn xóa?'"+
+                                    ')" href="../admin/taikhoan/delete/'+data[0][i].id+'" class="fa fa-remove fa-fw" style="color: #ff0000;">Xóa</a></td>'+
+                                    '</tr>'
+                                    );
+          }
+        })
+    </script>
+    <!-- /#wrapper -->

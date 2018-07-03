@@ -1,0 +1,274 @@
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Thêm tài khoản</h1>
+                <form class="form-horizontal" action="" method="POST" enctype="application/x-www-form-urlencoded" onsubmit="return checkPw(this);">
+                  <div class="row">
+                    <div class=" col-lg-12">
+                      <div class=" panel panel-default">
+                        <div class="panel-heading">
+                            Nhập thông tin Cá nhân
+                        </div>
+                        <div class="panel-body" >
+                          <div class="row">
+                            <div class="form-group col-md-4" style="margin-left: 5px;">
+                                <label>Họ tên *</label>
+                                <input required class="form-control" placeholder="Nhập họ tên" name="hoten" type="text" autofocus autocomplete="off">
+                            </div>
+                            <div class="form-group col-md-4" style="margin-left: 5px;">
+                              <label>Giới Tính *</label>
+                              <select class="form-control" name="gioitinh" id="gioitinh">
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-4" style="margin-left: 5px;">
+                              <label>Ngày sinh *</label>
+                              <input required class="form-control" placeholder="Nhập ngày sinh" name="ngaysinh" type="date" autofocus autocomplete="off">
+                            </div>
+                            <div class="form-group col-md-4" style="margin-left: 5px;">
+                              <label>Số CMND *</label>
+                              <input required class="form-control" placeholder="Nhập CMND" name="cmnd" type="text" autofocus autocomplete="off">
+                            </div>
+                            <div class="form-group col-md-4" style="margin-left: 5px;">
+                              <label>Ngày cấp *</label>
+                              <input required class="form-control" placeholder="Nhập ngày cấp" name="ngaycap" type="date" autofocus autocomplete="off">
+                            </div>
+                            <div class="form-group col-md-4" style="margin-left: 5px;">
+                              <label>Nơi cấp *</label>
+                              <input required class="form-control" placeholder="Nhập nơi cấp" name="noicap" type="rext" autofocus autocomplete="off">
+                            </div>
+                            <div class="form-group col-md-4" style="margin-left: 5px;">
+                              <label>Số điện thoại *</label>
+                              <input required class="form-control" placeholder="Nhập số điện thoại" name="sdt" type="text" autofocus autocomplete="off">
+                            </div>
+                            <div class="form-group col-md-4" style="margin-left: 5px;">
+                              <label>E-Mail</label>
+                              <input class="form-control" placeholder="Nhập Email" name="mail" type="email" autofocus autocomplete="off">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Close panel -->
+                    </div>
+                    <div class="col-md-12">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Nhập thông tin Cơ quan
+                        </div>
+                        <div class="panel-body" >
+                          <div class="row">
+                              <div class="form-group col-md-4" style="margin-left: 5px;">
+                                <label>Mã Cơ quan</label>
+                                <input class="form-control" placeholder="Nhập Mã cơ quan" name="macoquan" type="text" autofocus autocomplete="off">
+                              </div>
+                              <div class="form-group col-md-4" style="margin-left: 5px;">
+                                <label>Tên Cơ quan *</label>
+                                <input required class="form-control" placeholder="Nhập Tên cơ quan" name="tencoquan" type="text" autofocus autocomplete="off">
+                              </div>
+                              <div class="form-group col-md-4" style="margin-left: 5px;">
+                                <label>Bộ phận</label>
+                                <input class="form-control" placeholder="Nhập Bộ phận" name="bophan" type="text" autofocus autocomplete="off">
+                              </div>
+                              <div class="form-group col-md-4" style="margin-left: 5px;">
+                                <label for="tinhthanh">Tỉnh thành </label>
+                                <select class="form-control" name="tinhthanh" id="list1" onchange="getSelect1();">
+                                  <option value="">-- Chọn Tỉnh thành --</option>
+                                  <% data1.forEach(function(ds){ %>
+                                      <option value='<%= ds.id%>'><%= ds.TEN_TINH%></option>
+                                  <%})%>
+                                </select>
+                              </div>
+                              <div class="form-group col-md-4" style="margin-left: 5px;">
+                                <div id="list2" style="visibility: hidden;" onchange="getSelect2();">
+                                  <label for="quanhuyen">Quận/Huyện </label>
+                                  <select class="form-control" name="" id="quanhuyen">
+                                    <option value="">-- Chọn Quận/Huyện --</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-group col-md-4" style="margin-left: 5px;">
+                                <div id="list3" style="visibility: hidden;">
+                                  <label for="phuongxa">Phường/Xã </label>
+                                  <select class="form-control" name="phuongxa" id="phuongxa">
+                                    <option value= "">-- Chọn Phường/Xã --</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-group col-md-4" style="margin-left: 5px;">
+                                <label>Địa chỉ (Số/Đường/Khóm/Ấp) *</label>
+                                <input required class="form-control" placeholder="Nhập Số/Đường/Khóm/Ấp" name="diachi" type="text" autofocus autocomplete="off">
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Nhập thông tin Tài khoản
+                        </div>
+                        <div class="panel-body" >
+                          <div class="row">
+                              <div class="form-group col-md-4" style="margin-left: 5px;">
+                                  <label>Tên Đăng nhập</label>
+                                  <input required class="form-control" placeholder="Tên Đăng nhập" name="us" type="text" autofocus autocomplete="off">
+                              </div>
+                              <div class="form-group col-md-4" style="margin-left: 5px;">
+                                <label>Mật khẩu</label>
+                                <input class="form-control" placeholder="Mật khẩu" name="pw" type="password" autofocus autocomplete="off" required>
+                              </div>
+                              <div class="form-group col-md-4" style="margin-left: 5px;">
+                                <label>Xác nhận mật khẩu</label>
+                                <input class="form-control" placeholder="Nhập lại mật khẩu" name="pws" type="password" autofocus autocomplete="off" required>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <input style="float: right" type="submit" value="Tạo tài khoản" class="btn btn-success" />
+                      <a style="float: right; margin-right: 4px; margin-bottom: 20px;" href="/admin/taikhoan" class="btn btn-default">Hủy</a>
+                    </div>
+                  </div>
+
+                </form>
+              </div>
+                        <!-- /.col-lg-12 -->
+            </div>
+        </div>
+                <!-- /.row -->
+    </div>
+            <!-- /.container-fluid -->
+  </div>
+        <!-- /#page-wrapper -->
+</div>
+    <!-- /#wrapper -->
+
+<script type="text/javascript">
+      function checkPw(form) {
+      user = form.us.value;
+      pw = form.pw.value;
+      pw1 = form.pws.value;
+
+      diachi = form.diachi.value;
+      tinh = form.list1.value;
+      quan = form.quanhuyen.value;
+      phuong = form.phuongxa.value;
+      coquan = form.tencoquan.value;
+
+      sdt = form.sdt.value;
+      noicap = form.noicap.value;
+      ngaycap = form.ngaycap.value;
+      cmnd = form.cmnd.value;
+      ngaysinh = form.ngaysinh.value;
+      hoten = form.hoten.value;
+
+      if(user==""){
+        alert ("\nTên đăng nhập không được để trống!");
+        return false;
+      }
+      else if (pw == "") {
+        alert ("\nMật khẩu không được để trống!");
+        return false;
+      }else if (pw1 == "") {
+        alert ("\nHãy nhập lại mật khẩu!");
+        return false;
+      } else if(pw1 != pw) {
+        alert ("\nNhập lại mật khẩu chưa đúng!");
+        return false;
+      } else if(diachi == "") {
+        alert ("\nHãy nhập địa chỉ!");
+        return false;
+      } else if(tinh == "") {
+        alert ("\nHãy chọn tỉnh thành!");
+        return false;
+      } else if(quan == "") {
+        alert ("\nHãy chọn Quận/Huyện!");
+        return false;
+      } else if(phuong == "") {
+        alert ("\nHãy chọn Phường/Xã!");
+        return false;
+      } else if(coquan == "") {
+        alert ("\nHãy nhập Tên cơ quan!");
+        return false;
+      } else if(sdt == "") {
+        alert ("\nHãy nhập Số điện thoại!");
+        return false;
+      } else if(noicap == "") {
+        alert ("\nHãy nhập Nơi cấp CMND!");
+        return false;
+      } else if(ngaycap == "") {
+        alert ("\nHãy nhập chọn ngày cấp CMND!");
+        return false;
+      } else if(cmnd == "") {
+        alert ("\nHãy nhập Số CMND!");
+        return false;
+      } else if(ngaysinh == "") {
+        alert ("\nHãy chọn ngày sinh!");
+        return false;
+      } else if(hoten == "") {
+        alert ("\nHãy nhập Họ tên!");
+        return false;
+      }else {
+        return true;
+      }
+    }
+</script>
+    <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
+    <script>
+      function getSelect1(){
+        //Thông báo kiểm tra tên user có tồn tại chưa
+        const socket = io("http://localhost:3000/");
+        socket.on("server_sendData_info", function(data){
+          if(data == -2){
+            alert("Tên tài khoản đã tồn tại!")
+          }
+        })
+        var temp = "";
+        var Sel1 = document.getElementById("list1").value;
+        if(Sel1 == ""){
+          document.getElementById('list2').style.visibility = 'hidden';
+          document.getElementById('list3').style.visibility = 'hidden';
+        }else if(Sel1 != null) {
+          //Xử lý khi chọn select
+          socket.emit("trangchu_sendData_QH",Sel1);
+          socket.on("server_sendData_QH", function(data){
+            $('#quanhuyen').html("<option value='"+temp+"'>-- Chọn Quận/Huyện --</option>");
+            $('#phuongxa').html("<option value='"+temp+"'>-- Chọn Phường/Xã --</option>");
+            for(var i = 0; i < data.length; i++){
+              $('#quanhuyen').append("<option value='"+data[i].id+"'>"+data[i].TEN_QUAN_HUYEN+"</option>");
+            }
+          });
+          document.getElementById('list2').style.visibility = 'visible';
+        }else {
+          document.getElementById('list2').style.visibility = 'hidden';
+          document.getElementById('list3').style.visibility = 'hidden';
+        }
+        return false;
+      }
+    </script>
+    <script>
+    function getSelect2(){
+      var Sel1 = document.getElementById("quanhuyen").value;
+      if(Sel1 == ""){
+        document.getElementById('list3').style.visibility = 'hidden';
+      }else if(Sel1 != null) {
+        //Xử lý khi chọn select
+        //Khi up ken heruku nho thay doi địc chỉ này
+        const socket = io("http://localhost:3000/");
+        socket.emit("trangchu_sendData_PX",Sel1);
+        socket.on("server_sendData_PX", function(data){
+          $('#phuongxa').html('<option value = "">-- Chọn Phường/Xã --</option>');
+          for(var i = 0; i < data.length; i++){
+            $('#phuongxa').append("<option value='"+data[i].id+"'>"+data[i].TEN_PHUONG_XA+"</option>");
+          }
+        });
+        document.getElementById('list3').style.visibility = 'visible';
+      }else {
+        document.getElementById('list3').style.visibility = 'hidden';
+      }
+      return false;
+    }
+    </script>

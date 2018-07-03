@@ -4,6 +4,7 @@ const Passport = require('passport');
 const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy;
 const app = express();
+const expressLayouts = require('express-ejs-layouts');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 server.listen(process.env.PORT ||3000);
@@ -15,7 +16,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({ secret: 'secret', name: 'cookie_dangnhap', cookie:{maxAge: 1000*60*5}, proxy: true, resave: true, saveUninitialized: true}));
 app.use(Passport.initialize());
 app.use(Passport.session());
-app.use(express.static("public"));
+app.use(express.static('public'));
+app.use(expressLayouts);
 
 const sequelize = require('sequelize');
 const Op = sequelize.Op;
@@ -31,9 +33,9 @@ var urlencodedParser = bodyParser.urlencoded({extended: false});
 const USER = config.define('USER',{
   username: sequelize.STRING,
   password: sequelize.STRING,
+  trangthai: sequelize.INTEGER,
   info_user: sequelize.INTEGER,
   coquan: sequelize.INTEGER,
-  trangthai: sequelize.INTEGER
 })
 
 const TRANGTHAI = config.define('TRANGTHAI',{
@@ -72,28 +74,56 @@ const COQUAN = config.define('COQUAN',{
   DIACHI_SO: sequelize.STRING,
   ma_diachi: sequelize.INTEGER
 })
+
+const DUONGSU = config.define('DUONGSU',{
+  HOTEN: sequelize.STRING,
+  GIOITINH: sequelize.STRING,
+  NGAYSINH: sequelize.DATE,
+  CMND: sequelize.STRING,
+  SDT: sequelize.STRING,
+  NGAYCAP: sequelize.DATE,
+  NOICAP: sequelize.STRING,
+  QUOCTICH: sequelize.STRING,
+  ma_diachi: sequelize.INTEGER,
+  DIACHI_SO: sequelize.STRING,
+  TINHTRANG: 
+
+})
 //Đồng bộ với sql
 config.sync();
 
-//Trang private
+//Điều hướng route login
+app.route('/login')
+.get((req, res) => res.render('login.ejs',{layout: false}))
+.post(Passport.authenticate('local',{failureRedirect: '/login',successRedirect: '/admin'}))
+
+//Trang private admin
 app.get('/admin',(req, res) => {
   if(req.isAuthenticated()){
-    USER.findOne({where:{username: req.user}})
-    .then(USER => {
-      res.render('admin/index_ad', {data: USER});
+    config.query('SELECT * FROM public."INFO_USER" as a, public."USER" as b WHERE b.info_user = a.id and b.username ='+"'"+req.user+"'")
+    .then(title => {
+      res.render('admin/index', {data: title, layout: 'layouts/admin/layout_ad'});
     })
   }else {
       res.redirect('/login');
   }
 });
 
-//Điều hướng route login
-app.route('/login')
-.get((req, res) => res.render('login.ejs'))
-.post(Passport.authenticate('local',{failureRedirect: '/login',successRedirect: '/admin'}))
+//Trang private admin tài khoản
+app.get('/admin/taikhoan',(req, res) => {
+  if(req.isAuthenticated()){
+    config.query('SELECT * FROM public."INFO_USER" as a, public."USER" as b WHERE b.info_user = a.id and b.username ='+"'"+req.user+"'")
+    .then(title => {
+      res.render('admin/taikhoan/index', {data: title, layout: 'layouts/admin/layout_ad'});
+    })
+  }else {
+      res.redirect('/login');
+  }
+});
+
 
 //Điều hướng route edit user
-app.get('/admin/edit/:id',function(req, res){
+app.get('/admin/taikhoan/edit/:id',function(req, res){
   var gioitinhs = "";
      if(req.isAuthenticated()){
       var i = req.params.id;
@@ -116,7 +146,20 @@ app.get('/admin/edit/:id',function(req, res){
                 .then(nsinh =>{
                   TRANGTHAI.findAll({where:{[Op.and]: [{id: {[Op.ne]:  arr[0][0].trangthai}},{APDUNG: "USER"}]}})
                   .then(tthai =>{
-                    res.render("admin/edit.ejs",{data1: arr, data2: arrqh, data3: arrpx,data4: arrTinh, data: req.user, gt: gioitinhs, nc: ncap, ns: nsinh, tt: tthai});
+                        config.query('SELECT * FROM public."INFO_USER" as a, public."USER" as b WHERE b.info_user = a.id and b.username ='+"'"+req.user+"'")
+                    .then(title => {
+                      res.render("admin/taikhoan/edit.ejs",{data1: arr,
+                        data2: arrqh,
+                        data3: arrpx,
+                        data4: arrTinh,
+                        data: title,
+                        gt: gioitinhs,
+                        nc: ncap,
+                        ns: nsinh,
+                        tt: tthai,
+                        layout: 'layouts/admin/layout_ad'
+                      });
+                    })
                   })
                 })
               })
@@ -128,7 +171,7 @@ app.get('/admin/edit/:id',function(req, res){
       res.redirect('/login');
     }
 })
-app.post('/admin/edit/:id',urlencodedParser, function(req, res){
+app.post('/admin/taikhoan/edit/:id',urlencodedParser, function(req, res){
   var i = req.params.id;
   var user = req.body.us;
   var pass = req.body.pw;
@@ -163,7 +206,7 @@ app.post('/admin/edit/:id',urlencodedParser, function(req, res){
         }
       })
       if(us == 1){
-        res.redirect('/admin/edit/'+i);
+        res.redirect('/admin/taikhoan/edit/'+i);
       }else {
         USER.update({
           username: user,
@@ -193,7 +236,7 @@ app.post('/admin/edit/:id',urlencodedParser, function(req, res){
         },{
           where: {id: sUSER.info_user}
         });
-        res.redirect('/admin');
+        res.redirect('/admin/taikhoan');
       }
     }else {
       USER.update({
@@ -229,7 +272,7 @@ app.post('/admin/edit/:id',urlencodedParser, function(req, res){
   })
 })
 
-app.get('/admin/delete/:id',function(req, res){
+app.get('/admin/taikhoan/delete/:id',function(req, res){
     if(req.isAuthenticated()){
       var i = req.params.id;
       USER.findOne({where: {id: i}})
@@ -238,24 +281,31 @@ app.get('/admin/delete/:id',function(req, res){
         INFO_USER.destroy({where: {id: user.info_user}});
       })
       USER.destroy({where: {id: i}});
-      res.redirect('/admin');
+      res.redirect('/admin/taikhoan');
     }else {
       res.redirect('/login');
     }
   })
 
-app.get('/admin/create',function(req, res){
+app.get('/admin/taikhoan/create',function(req, res){
       if(req.isAuthenticated()){
         TINH.findAll({raw: true})
         .then(arrTinh =>{
-          res.render("admin/create",{data: req.user, data1: arrTinh});
+          config.query('SELECT * FROM public."INFO_USER" as a, public."USER" as b WHERE b.info_user = a.id and b.username ='+"'"+req.user+"'")
+          .then(title => {
+            res.render("admin/taikhoan/create",{
+              data: title,
+              data1: arrTinh,
+              layout: 'layouts/admin/layout_ad'
+            });
+          })
         })
       }else {
         res.redirect('/login');
       }
 })
 
-app.post('/admin/create',urlencodedParser, function(req, res){
+app.post('/admin/taikhoan/create',urlencodedParser, function(req, res){
   //Bảng user
   var user = req.body.us;
   var pass = req.body.pw;
@@ -287,7 +337,7 @@ app.post('/admin/create',urlencodedParser, function(req, res){
     }
   })
   if(us == 0){
-    res.redirect('/admin/create');
+    res.redirect('/admin/taikhoan/create');
   }else {
     COQUAN.create({
       MA_COQUAN: macoquan,
@@ -316,16 +366,38 @@ app.post('/admin/create',urlencodedParser, function(req, res){
           trangthai: 2
         })
         .then(row => {
-          res.redirect('/admin')
+          res.redirect('/admin/taikhoan')
         })
       })
     })
   }
 })
-
-app.route('/login')
-.get((req, res) => res.render('login.ejs'))
-.post(Passport.authenticate('local',{failureRedirect: '/login',successRedirect: '/admin'}))
+app.get('/admin/taikhoan/view/:id', function(req, res){
+  var gioitinhs = "";
+     if(req.isAuthenticated()){
+      var i = req.params.id;
+      config.query('SELECT * FROM public."INFO_USER" as b, public."TRANGTHAI" as c, public."COQUAN" as d, public."PHUONG_XA" as e, public."QUAN_HUYEN" as f, public."TINH" as g, public."USER" as a where a.info_user = b.id and a.trangthai = c.id and a.coquan = d.id and d.ma_diachi = e.id and e.ma_quan_huyen = f.id and f.ma_tinh = g.id and a.id ='+ i)
+      .then(arr => {
+        config.query('SELECT * FROM public."INFO_USER" as a, public."USER" as b WHERE b.info_user = a.id and b.username ='+"'"+req.user+"'")
+        .then(title => {
+          config.query('SELECT to_char("NGAYCAP",'+ "'yyyy-MM-dd'"+') FROM public."INFO_USER" where id ='+arr[0][0].info_user)
+          .then(ncap =>{
+            config.query('SELECT to_char("NGAYSINH",'+ "'yyyy-MM-dd'"+') FROM public."INFO_USER" where id ='+arr[0][0].info_user)
+            .then(nsinh =>{
+              res.render("admin/taikhoan/view.ejs",{data1: arr,
+                data: title,
+                nc: ncap,
+                ns: nsinh,
+                layout: 'layouts/admin/layout_ad'
+              })
+            })
+          })
+        })
+      })
+    }else {
+      res.redirect('/login');
+    }
+})
 
 //Kiểm tra chứng thực user
 Passport.use(new LocalStrategy((username, password, done) => {
