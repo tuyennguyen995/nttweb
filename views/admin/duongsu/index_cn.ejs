@@ -1,0 +1,76 @@
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Đương sự cá nhân</h1>
+                <p>
+                    <a class="btn btn-primary" href="/admin/duongsu_cn/create">Thêm đương sự</a>
+                </p>
+                <table class="table">
+                  <tbody id="data_user">
+                    <tr>
+                        <th>
+                            Họ tên
+                        </th>
+                        <th>
+                            Ngày sinh
+                        </th>
+                        <th>
+                            CMND
+                        </th>
+                        <th>
+                            Tình trạng
+                        </th>
+                        <th>
+                            Hôn nhân
+                        </th>
+                        <th>
+                            Tỉnh thành
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                  </tbody>
+                </table>
+                        <!-- /.col-lg-12 -->
+            </div>
+        </div>
+                <!-- /.row -->
+    </div>
+            <!-- /.container-fluid -->
+  </div>
+        <!-- /#page-wrapper -->
+</div>
+  <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
+      <script type="text/javascript">
+        const socket = io("http://localhost:3000/");
+        socket.on("server_sendData_dsDSCN", function(data){
+          for(var i = 0; i < data[0].length; i++){
+            $('#data_user').append("<tr>"+
+                                    "<td>"+data[0][i].HOTEN+"</td>"+
+                                    '<td id="'+data[0][i].id+'"></td>'+
+                                    "<td>"+data[0][i].CMND+"</td>"+
+                                    "<td>"+data[0][i].TINHTRANG+"</td>"+
+                                    "<td>"+data[0][i].TT_HONNHAN+"</td>"+
+                                    "<td>"+data[0][i].TEN_TINH+"</td>"+
+                                    '<td><a href="../admin/duongsu_cn/view/'+data[0][i].id+'" class="fa  fa-eye fa-fw">Xem</a>'+"</td>"+
+                                    '<td>&nbsp&nbsp|</td>"'+
+                                    '<td><a href="../admin/duongsu_cn/edit/'+data[0][i].id+'" class="fa fa-edit fa-fw">Sửa</a>'+"</td>"+
+                                    '<td>&nbsp|</td>"'+
+                                    '<td><a onclick= "return confirm('
+                                    +"'Bạn có chắc muốn xóa?'"+
+                                    ')" href="../admin/duongsu_cn/delete/'+data[0][i].id+'" class="fa fa-remove fa-fw" style="color: #ff0000;">Xóa</a></td>'+
+                                    '</tr>'
+                                    );
+          }
+        })
+        socket.on("server_sendData_dsDSCN_ns", function(data){
+          for(var i = 0; i < data[0].length; i++){
+            $('#'+data[0][i].id).append(data[0][i].to_char);
+          }
+        })
+    </script>
+    <!-- /#wrapper -->

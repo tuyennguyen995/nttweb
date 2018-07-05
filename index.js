@@ -19,7 +19,7 @@ app.use(session({
   secret: 'secret',
   name: 'cookie_dangnhap',
   cookie: {
-    maxAge: 1000 * 60 * 5
+    maxAge: 1001 * 60 * 30
   },
   proxy: true,
   resave: true,
@@ -104,9 +104,7 @@ const HONNHAN = config.define('HONNHAN', {
   SO_DK: sequelize.STRING,
   QUYENSO: sequelize.STRING,
   NGAYCAP_GCN: sequelize.DATE,
-  NOICAP_GCN: sequelize.STRING,
-  nguuoi_a: sequelize.INTEGER,
-  nguoi_b: sequelize.INTEGER
+  NOICAP_GCN: sequelize.STRING
 })
 
 //Đồng bộ với sql
@@ -560,6 +558,209 @@ app.get('/admin/taikhoan/view/:id', function(req, res) {
   }
 })
 
+//Trang DUONGSU_CANHAN
+app.get('/admin/duongsu_cn/', function(req, res){
+  if (req.isAuthenticated()) {
+    config.query('SELECT * FROM public."INFO_USER" as a, public."USER" as b WHERE b.info_user = a.id and b.username =' + "'" + req.user + "'")
+      .then(title => {
+        res.render('admin/duongsu/index_cn', {
+          data: title,
+          layout: 'layouts/admin/layout_ad'
+        })
+      })
+  } else {
+    res.redirect('/login');
+  }
+});
+app.get('/admin/duongsu_cn/create',function(req, res){
+  if (req.isAuthenticated()) {
+    TINH.findAll({
+        raw: true
+      })
+      .then(arrTinh => {
+        config.query('SELECT * FROM public."INFO_USER" as a, public."USER" as b WHERE b.info_user = a.id and b.username =' + "'" + req.user + "'")
+          .then(title => {
+            res.render("admin/duongsu/create_cn.ejs", {
+              data: title,
+              data1: arrTinh,
+              layout: 'layouts/admin/layout_ad'
+            });
+          })
+      })
+  } else {
+    res.redirect('/login');
+  }
+})
+app.post('/admin/duongsu_cn/create', urlencodedParser, function(req, res) {
+  //Bảng duongsu
+  var danhmuc = 1;
+  var trangthai = 5;
+  honnhan = req.body.hon_nhan;
+  ghichu = req.body.ghichu;
+  tinhtrang = req.body.tinhtrang;
+  quoctich = req.body.quoctich;
+  diachi = req.body.diachi;
+  phuong = req.body.phuongxa;
+  sdt = req.body.sdt;
+  noicap = req.body.noicap;
+  ngaycap = req.body.ngaycap;
+  cmnd = req.body.cmnd;
+  ngaysinh = req.body.ngaysinh;
+  gioitinh = req.body.gioitinh;
+  hoten = req.body.hoten;
+  cmnd_vc = req.body.cmnd_vc;
+
+  var us = -1;
+  DUONGSU_CANHAN.findOne({
+      where: {
+        CMND: cmnd
+      }
+    })
+    .then(DS => {
+      if (DS != "") {
+        us = 1;
+
+      } else {
+        us = 0;
+        temp = -4; //Lỗi đương sự đã tồn tại
+      }
+    })
+  if (us == 0) {
+    res.redirect('/admin/duongsu_cn/create');
+  } else if (cmnd == cmnd_vc) {
+    temp = -5;
+    res.redirect('/admin/duongsu_cn/create');
+  }else {
+      if(honnhan == "Đã kết hôn"){
+        //bảng hôn nhân
+        so_dk = req.body.so_dk;
+        so_quyen = req.body.so_quyen;
+        ngaycap_gcn = req.body.ngaycap_gcn;
+        noicap_gcn = req.body.noicap_gcn;
+
+        HONNHAN.create({
+          SO_DK: so_dk,
+          QUYENSO: so_quyen,
+          NGAYCAP_GCN: ngaycap_gcn,
+          NOICAP_GCN: noicap_gcn
+        })
+        .then(hn => {
+          //bảng duongsu_cn vợ/chồng
+          var vochong_vc = hn.id;
+          var danhmuc_vc = 1;
+          var trangthai_vc = 5;
+          honnhan_vc = "Đã kết hôn";
+          ghichu_vc = req.body.ghichu_vc;
+          tinhtrang_vc = "Sống";
+          quoctich_vc = req.body.quoctich_vc;
+          diachi_vc = "";
+          phuongxa_vc = "";
+          sdt_vc = "";
+          noicap_vc = req.body.noicap_vc;
+          ngaycap_vc = req.body.ngaycap_vc;
+          cmnd_vc = req.body.cmnd_vc;
+          ngaysinh_vc = req.body.ngaysinh_vc;
+          gioitinh_vc ="",
+          hoten_vc = req.body.hoten_vc;
+          //Sử lý đương sự v/c
+          DUONGSU_CANHAN.findOne({
+              where: {
+                CMND: cmnd_vc
+              }
+            })
+            .then(DSs => {
+              if (DSs != null) {
+                //Nếu tồn tại duong su v/c
+                DUONGSU_CANHAN.update({
+                  TT_HONNHAN: honnhan_vc,
+                  vo_chong: vochong_vc
+                }, {
+                  where: {
+                    id: DSs.id
+                  }
+                });
+              } else {
+                //nếu không tồn tại duong su v/c
+                if(gioitinh == "Nam"){
+                  gioitinh_vc = "Nữ";
+                }else {
+                  gioitinh_vc = "Nam";
+                };
+                dia_chi = req.body.dia_chi;
+                if(dia_chi =="1"){
+                   diachi_vc = diachi;
+                   phuongxa_vc = phuong;
+                }else {
+                   diachi_vc = req.body.diachi_vc;
+                   phuongxa_vc = req.body.phuongxa1;
+                   sdt_vc = req.body.sdt_vc;
+                };
+
+                DUONGSU_CANHAN.create({
+                  HOTEN: hoten_vc,
+                  GIOITINH: gioitinh_vc,
+                  NGAYSINH: ngaysinh_vc,
+                  CMND: cmnd_vc,
+                  SDT: sdt_vc,
+                  NGAYCAP: ngaycap_vc,
+                  NOICAP: noicap_vc,
+                  QUOCTICH: quoctich_vc,
+                  ma_diachi: phuongxa_vc,
+                  DIACHI_SO: diachi_vc,
+                  TINHTRANG: tinhtrang_vc,
+                  TT_HONNHAN: honnhan_vc,
+                  vo_chong: vochong_vc,
+                  GHICHU: ghichu_vc,
+                  trang_thai: trangthai_vc,
+                  danh_muc: danhmuc_vc
+                })
+              }
+            })
+        //Lưu đương sự
+        DUONGSU_CANHAN.create({
+          HOTEN: hoten,
+          GIOITINH: gioitinh,
+          NGAYSINH: ngaysinh,
+          CMND: cmnd,
+          SDT: sdt,
+          NGAYCAP: ngaycap,
+          NOICAP: noicap,
+          QUOCTICH: quoctich,
+          ma_diachi: phuong,
+          DIACHI_SO: diachi,
+          TINHTRANG: tinhtrang,
+          TT_HONNHAN: honnhan,
+          vo_chong: hn.id,
+          GHICHU: ghichu,
+          trang_thai: trangthai,
+          danh_muc: danhmuc
+        })
+      })
+      res.redirect('/admin/duongsu_cn')
+    }else {
+      //Sử lý nếu chưa kết hôn
+      DUONGSU_CANHAN.create({
+        HOTEN: hoten,
+        GIOITINH: gioitinh,
+        NGAYSINH: ngaysinh,
+        CMND: cmnd,
+        SDT: sdt,
+        NGAYCAP: ngaycap,
+        NOICAP: noicap,
+        QUOCTICH: quoctich,
+        ma_diachi: phuong,
+        DIACHI_SO: diachi,
+        TINHTRANG: tinhtrang,
+        TT_HONNHAN: honnhan,
+        GHICHU: ghichu,
+        trang_thai: trangthai,
+        danh_muc: danhmuc
+      })
+        res.redirect('/admin/duongsu_cn')
+    }
+  }//Đóng diều kiện kiểm tra đương sự
+})
+
 //Lắng nghe kết nối tới Server
 io.on("connection", function(socket) {
   console.log("Có người kết nối kìa!" + socket.id);
@@ -598,5 +799,24 @@ io.on("connection", function(socket) {
   config.query('SELECT * FROM public."INFO_USER" as b, public."TRANGTHAI" as c, public."COQUAN" as d, public."PHUONG_XA" as e, public."QUAN_HUYEN" as f, public."TINH" as g,  public."USER" as a where a.info_user = b.id and a.trangthai = c.id and a.coquan = d.id and d.ma_diachi = e.id and e.ma_quan_huyen = f.id and f.ma_tinh = g.id')
     .then(arr => {
       socket.emit("server_sendData_dsUser", arr);
+    });
+  config.query('SELECT * FROM public."PHUONG_XA" as e, public."QUAN_HUYEN" as f, public."TINH" as g, public."DUONGSU_CANHAN" as a where a.ma_diachi = e.id and e.ma_quan_huyen = f.id and f.ma_tinh = g.id')
+    .then(arr => {
+      socket.emit("server_sendData_dsDSCN", arr);
+    });
+  config.query('SELECT to_char("NGAYSINH",' + "'dd/MM/yyyy'" + '), id FROM public."DUONGSU_CANHAN"')
+    .then(nsinh => {
+      socket.emit("server_sendData_dsDSCN_ns", nsinh);
     })
-});
+  socket.on("DSCN_sendData_id_vochong", function(data){
+    DUONGSU_CANHAN.findOne({where: {id: data}})
+    .then(row =>{
+      if(row.vo_chong != ""){
+        config.query('SELECT * FROM public."DUONGSU_CANHAN" as a where a.vo_chong = '+row.vo_chong+' and a.id != '+row.id)
+          .then(vc => {
+            socket.emit("server_sendData_vochong", vc);
+          });
+      }
+    })
+  })
+})
