@@ -94,7 +94,7 @@ const DUONGSU_CANHAN = config.define('DUONGSU_CANHAN', {
   ma_diachi: sequelize.INTEGER,
   DIACHI_SO: sequelize.STRING,
   TINHTRANG: sequelize.STRING,
-  TT_HONNHAN: sequelize.STRING,
+  tt_honnhan: sequelize.INTEGER,
   vo_chong: sequelize.INTEGER,
   GHICHU: sequelize.STRING,
   trang_thai: sequelize.INTEGER,
@@ -106,7 +106,9 @@ const HONNHAN = config.define('HONNHAN', {
   NGAYCAP_GCN: sequelize.DATE,
   NOICAP_GCN: sequelize.STRING
 })
-
+const TINHTRANG_HONNHAN = config.define('TINHTRANG_HONNHAN',{
+  TEN_TT_HONNHAN: sequelize.STRING
+})
 //Đồng bộ với sql
 config.sync();
 
@@ -631,7 +633,7 @@ app.post('/admin/duongsu_cn/create', urlencodedParser, function(req, res) {
     temp = -5;
     res.redirect('/admin/duongsu_cn/create');
   }else {
-      if(honnhan == "Đã kết hôn"){
+      if(honnhan == "2"){
         //bảng hôn nhân
         so_dk = req.body.so_dk;
         so_quyen = req.body.so_quyen;
@@ -649,7 +651,7 @@ app.post('/admin/duongsu_cn/create', urlencodedParser, function(req, res) {
           var vochong_vc = hn.id;
           var danhmuc_vc = 1;
           var trangthai_vc = 5;
-          honnhan_vc = "Đã kết hôn";
+          honnhan_vc = 2;
           ghichu_vc = req.body.ghichu_vc;
           tinhtrang_vc = "Sống";
           quoctich_vc = req.body.quoctich_vc;
@@ -708,7 +710,7 @@ app.post('/admin/duongsu_cn/create', urlencodedParser, function(req, res) {
                   ma_diachi: phuongxa_vc,
                   DIACHI_SO: diachi_vc,
                   TINHTRANG: tinhtrang_vc,
-                  TT_HONNHAN: honnhan_vc,
+                  tt_honnhan: honnhan_vc,
                   vo_chong: vochong_vc,
                   GHICHU: ghichu_vc,
                   trang_thai: trangthai_vc,
@@ -729,7 +731,7 @@ app.post('/admin/duongsu_cn/create', urlencodedParser, function(req, res) {
           ma_diachi: phuong,
           DIACHI_SO: diachi,
           TINHTRANG: tinhtrang,
-          TT_HONNHAN: honnhan,
+          tt_honnhan: honnhan_vc,
           vo_chong: hn.id,
           GHICHU: ghichu,
           trang_thai: trangthai,
@@ -739,26 +741,128 @@ app.post('/admin/duongsu_cn/create', urlencodedParser, function(req, res) {
       res.redirect('/admin/duongsu_cn')
     }else {
       //Sử lý nếu chưa kết hôn
-      DUONGSU_CANHAN.create({
-        HOTEN: hoten,
-        GIOITINH: gioitinh,
-        NGAYSINH: ngaysinh,
-        CMND: cmnd,
-        SDT: sdt,
-        NGAYCAP: ngaycap,
-        NOICAP: noicap,
-        QUOCTICH: quoctich,
-        ma_diachi: phuong,
-        DIACHI_SO: diachi,
-        TINHTRANG: tinhtrang,
-        TT_HONNHAN: honnhan,
-        GHICHU: ghichu,
-        trang_thai: trangthai,
-        danh_muc: danhmuc
+      HONNHAN.create({
+      })
+      .then(hn => {
+        DUONGSU_CANHAN.create({
+          HOTEN: hoten,
+          GIOITINH: gioitinh,
+          NGAYSINH: ngaysinh,
+          CMND: cmnd,
+          SDT: sdt,
+          NGAYCAP: ngaycap,
+          NOICAP: noicap,
+          QUOCTICH: quoctich,
+          ma_diachi: phuong,
+          DIACHI_SO: diachi,
+          TINHTRANG: tinhtrang,
+          tt_honnhan: honnhan,
+          vo_chong: hn.id,
+          GHICHU: ghichu,
+          trang_thai: trangthai,
+          danh_muc: danhmuc
+        })
       })
         res.redirect('/admin/duongsu_cn')
     }
   }//Đóng diều kiện kiểm tra đương sự
+})
+app.get('/admin/duongsu_cn/edit/:id', function(req, res) {
+  var gioitinhs = "";
+  if (req.isAuthenticated()) {
+    var i = req.params.id;
+    config.query('SELECT * FROM public."TRANGTHAI" as g, public."TINHTRANG_HONNHAN" as f, public."HONNHAN" as e, public."TINH" as d, public."QUAN_HUYEN" as c, public."PHUONG_XA" as b , public."DUONGSU_CANHAN" as a where b.id = a.ma_diachi and c.id = b.ma_quan_huyen and d.id = c.ma_tinh and e.id = a.vo_chong and f.id = a.tt_honnhan and g.id = a.trang_thai and a.id =' + i)
+      .then(arr => {
+        console.log(arr);
+        TINH.findAll({
+            where: {
+              id: {
+                [Op.ne]: arr[0][0].ma_tinh
+              }
+            }
+          })
+          .then(arrTinh => {
+            QUAN_HUYEN.findAll({
+                where: {
+                  [Op.and]: [{
+                    id: {
+                      [Op.ne]: arr[0][0].ma_quan_huyen
+                    }
+                  }, {
+                    ma_tinh: arr[0][0].ma_tinh
+                  }]
+                }
+              })
+              .then(arrqh => {
+                PHUONG_XA.findAll({
+                    where: {
+                      [Op.and]: [{
+                        id: {
+                          [Op.ne]: arr[0][0].ma_diachi
+                        }
+                      }, {
+                        ma_quan_huyen: arr[0][0].ma_quan_huyen
+                      }]
+                    }
+                  })
+                  .then(arrpx => {
+                    if (arr[0][0].GIOITINH == "Nam") {
+                      gioitinhs = "Nữ";
+                    } else {
+                      gioitinhs = "Nam";
+                    }
+                    config.query('SELECT to_char("NGAYCAP",' + "'yyyy-MM-dd'" + ') FROM public."DUONGSU_CANHAN" where id =' + arr[0][0].id)
+                      .then(ncap => {
+                        config.query('SELECT to_char("NGAYSINH",' + "'yyyy-MM-dd'" + ') FROM public."DUONGSU_CANHAN" where id =' + arr[0][0].id)
+                          .then(nsinh => {
+                            TRANGTHAI.findAll({
+                                where: {
+                                  [Op.and]: [{
+                                    id: {
+                                      [Op.ne]: arr[0][0].trang_thai
+                                    }
+                                  }, {
+                                    APDUNG: "DUONGSU"
+                                  }]
+                                }
+                              })
+                              .then(tthai => {
+                                //sử lý đương sự vợ chồng
+                                config.query('SELECT * FROM public."INFO_USER" as a, public."USER" as b WHERE b.info_user = a.id and b.username =' + "'" + req.user + "'")
+                                  .then(title => {
+                                    TINHTRANG_HONNHAN.findAll({
+                                        where: {
+                                          TEN_TT_HONNHAN: {
+                                            [Op.ne]: arr[0][0].TEN_TT_HONNHAN
+                                          }
+                                        }
+                                      })
+                                      .then(tt_hn => {
+                                      res.render("admin/duongsu/edit_cn.ejs", {
+                                        data1: arr,
+                                        data2: arrqh,
+                                        data3: arrpx,
+                                        data4: arrTinh,
+                                        data: title,
+                                        gt: gioitinhs,
+                                        nc: ncap,
+                                        ns: nsinh,
+                                        tt: tthai,
+                                        hn: tt_hn,
+                                        layout: 'layouts/admin/layout_ad'
+                                      });
+                                    })
+                                  })
+                              })
+                          })
+                      })
+                  })
+              })
+          })
+      })
+  } else {
+    res.redirect('/login');
+  }
 })
 
 //Lắng nghe kết nối tới Server
@@ -800,7 +904,7 @@ io.on("connection", function(socket) {
     .then(arr => {
       socket.emit("server_sendData_dsUser", arr);
     });
-  config.query('SELECT * FROM public."PHUONG_XA" as e, public."QUAN_HUYEN" as f, public."TINH" as g, public."DUONGSU_CANHAN" as a where a.ma_diachi = e.id and e.ma_quan_huyen = f.id and f.ma_tinh = g.id')
+  config.query('SELECT * FROM  public."TINHTRANG_HONNHAN" as b, public."PHUONG_XA" as e, public."QUAN_HUYEN" as f, public."TINH" as g, public."DUONGSU_CANHAN" as a where a.ma_diachi = e.id and e.ma_quan_huyen = f.id and f.ma_tinh = g.id and b.id  = a.tt_honnhan')
     .then(arr => {
       socket.emit("server_sendData_dsDSCN", arr);
     });
