@@ -18,9 +18,8 @@
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Giới Tính</label>
-                      <select class="form-control" name="gioitinh" id="gioitinh">
+                      <select class="form-control" name="gioitinh" id="gioitinh" disabled>
                         <option value="<%= data1[0][0].GIOITINH%>"><%= data1[0][0].GIOITINH%></option>
-                        <option value="<%= gt%>"><%= gt%></option>
                       </select>
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
@@ -29,7 +28,7 @@
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Số CMND *</label>
-                      <input required class="form-control" value="<%= data1[0][0].CMND%>" name="cmnd" type="text" autofocus autocomplete="off">
+                      <input readonly class="form-control" value="<%= data1[0][0].CMND%>" name="cmnd" type="text" autofocus autocomplete="off">
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Ngày cấp *</label>
@@ -45,7 +44,7 @@
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label for="tinhthanh">Tình trạng</label>
-                      <select class="form-control" name="tinhtrang" id="tinhtrang">
+                      <select class="form-control" name="tinhtrang" id="tinhtrang" disabled>
                                   <option value="<%= data1[0][0].TINHTRANG%>"><%= data1[0][0].TINHTRANG%></option>
                                   <option value="Đã chết">Đã chết</option>
                                 </select>
@@ -56,11 +55,8 @@
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Trạng thái</label>
-                      <select class="form-control" name="tthai">
+                      <select class="form-control" name="tthai" disabled>
                         <option value="<%= data1[0][0].trang_thai%>"><%= data1[0][0].TEN_TRANGTHAI%></option>
-                        <% tt.forEach(function(ds){ %>
-                            <option value="<%= ds.id%>"><%= ds.TEN_TRANGTHAI%></option>
-                        <%})%>
                       </select>
                     </div>
                   </div>
@@ -77,32 +73,23 @@
                   <div class="row">
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label for="tinhthanh">Tỉnh thành </label>
-                      <select class="form-control" name="tinhthanh" id="list1" onchange="getSelect1();">
+                      <select class="form-control" name="tinhthanh" id="list1" onchange="getSelect1();" disabled>
                         <option value="<%= data1[0][0].ma_diachi%>"><%= data1[0][0].TEN_TINH%></option>
-                        <% data4.forEach(function(ds){ %>
-                            <option value='<%= ds.id%>'><%= ds.TEN_TINH%></option>
-                        <%})%>
                       </select>
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <div id="list2" onchange="getSelect2();">
                         <label for="quanhuyen">Quận/Huyện </label>
-                        <select class="form-control" name="" id="quanhuyen">
+                        <select class="form-control" name="" id="quanhuyen" disabled>
                           <option value="<%= data1[0][0].ma_quan_huyen%>"><%= data1[0][0].TEN_QUAN_HUYEN%></option>
-                          <% data2.forEach(function(ds){ %>
-                              <option value='<%= ds.id%>'><%= ds.TEN_QUAN_HUYEN%></option>
-                          <%})%>
                           </select>
                       </div>
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <div id="list3">
                         <label for="phuongxa">Phường/Xã </label>
-                        <select class="form-control" name="phuongxa" id="phuongxa">
+                        <select class="form-control" name="phuongxa" id="phuongxa" disabled>
                           <option value="<%= data1[0][0].ma_diachi%>"><%= data1[0][0].TEN_PHUONG_XA%></option>
-                          <% data3.forEach(function(ds){ %>
-                              <option value='<%= ds.id%>'><%= ds.TEN_PHUONG_XA%></option>
-                          <%})%>
                         </select>
                       </div>
                     </div>
@@ -128,11 +115,8 @@
                     <div class="form-group col-md-12" style="margin-left: 5px;">
                       <div class="col-md-4" style="padding-left: 0px;">
                         <label for="tinhthanh">Tình trạng hôn nhân </label>
-                        <select class="form-control" name="hon_nhan" id="hon_nhan" onchange="getSelect3();">
+                        <select class="form-control" name="hon_nhan" id="hon_nhan" onchange="getSelect3();" disabled>
                           <option value="<%= data1[0][0].tt_honnhan%>"><%= data1[0][0].TEN_TT_HONNHAN%></option>
-                          <% hn.forEach(function(ds){ %>
-                              <option value= "<%= ds.id%>"><%= ds.TEN_TT_HONNHAN%></option>
-                          <%})%>
                                   </select>
                       </div>
                   </div>
@@ -144,8 +128,7 @@
               </div>
             </div>
             <div class="col-md-12">
-              <input style="float: right" type="submit" value="Cập nhật" class="btn btn-primary" />
-              <a style="float: right; margin-right: 4px; margin-bottom: 20px;" href="/admin/duongsu_cn" class="btn btn-default">Hủy</a>
+              <a style="float: right; margin-right: 4px; margin-bottom: 20px;" href="/admin/duongsu_cn" class="btn btn-default"><< Quay lại</a>
             </div>
           </div>
 
@@ -199,7 +182,7 @@
                         '<div class="row">'+
                           '<div class="form-group col-md-4" style="margin-left: 5px;">'+
                             '<label>Địa chỉ *</label>'+
-                            '<select class="form-control" name="dia_chi" id="dia_chi" onchange="getSelect6();">'+
+                            '<select class="form-control" name="dia_chi" id="dia_chi" onchange="getSelect6();" disabled>'+
                                       '<option value="1">Cùng địa chỉ</option>'+
                                       '<option value="2">Khác</option>'+
                                     '</select>'+
@@ -242,32 +225,23 @@
     $('#dia_chi').append('<option value="2">Khác</option>'+ '<option value="1">Cùng địa chỉ</option>');
     $('#diachi_vc').append('<div class="form-group col-md-4" style="margin-left: 5px;">'+
       '<label for="tinhthanh">Tỉnh thành </label>'+
-      '<select class="form-control" name="tinhthanh_vc" id="tinhthanh_vc" onchange="getSelect4();">'+
+      '<select class="form-control" name="tinhthanh_vc" id="tinhthanh_vc" onchange="getSelect4();" disabled>'+
                   '<option value="'+<%=data_vc[0][0].ma_tinh%>+'">'+"<%=data_vc[0][0].TEN_TINH%>"+'</option>'+
-                  '<% data4_vc.forEach(function(ds){ %>'+
-                      '<option value="<%= ds.id%>"><%= ds.TEN_TINH%></option>'+
-                  '<%})%>'+
                 '</select>'+
     '</div>'+
     '<div class="form-group col-md-4" style="margin-left: 5px;">'+
       '<div id="quanhuyen_vc" onchange="getSelect5();">'+
         '<label for="quanhuyen">Quận/Huyện </label>'+
-        '<select class="form-control" name="" id="quanhuyen1">'+
+        '<select class="form-control" name="" id="quanhuyen1" disabled>'+
                     '<option value="'+<%=data_vc[0][0].ma_quan_huyen%>+'">'+"<%=data_vc[0][0].TEN_QUAN_HUYEN%>"+'</option>'+
-                    '<% data2_vc.forEach(function(ds){ %>'+
-                        '<option value="<%= ds.id%>"><%= ds.TEN_QUAN_HUYEN%></option>'+
-                    '<%})%>'+
                   '</select>'+
       '</div>'+
     '</div>'+
     '<div class="form-group col-md-4" style="margin-left: 5px;">'+
       '<div id="phuongxa_vc">'+
         '<label for="phuongxa">Phường/Xã </label>'+
-        '<select class="form-control" name="phuongxa1" id="phuongxa1">'+
+        '<select class="form-control" name="phuongxa1" id="phuongxa1" disabled>'+
                     '<option value="'+<%=data_vc[0][0].ma_diachi%>+'">'+"<%=data_vc[0][0].TEN_PHUONG_XA%>"+'</option>'+
-                    '<% data3_vc.forEach(function(ds){ %>'+
-                        '<option value="<%= ds.id%>"><%= ds.TEN_PHUONG_XA%></option>'+
-                    '<%})%>'+
                   '</select>'+
       '</div>'+
     '</div>'+

@@ -46,7 +46,7 @@
 </div>
   <script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
       <script type="text/javascript">
-        const socket = io("http://localhost:3000/");
+        const socket = io("https://nttweb.herokuapp.com/");
         socket.on("server_sendData_dsDSCN", function(data){
           for(var i = 0; i < data[0].length; i++){
             $('#data_user').append("<tr>"+
@@ -57,7 +57,7 @@
                                     "<td>"+data[0][i].TEN_TT_HONNHAN+"</td>"+
                                     "<td>"+data[0][i].TEN_TINH+"</td>"+
                                     '<td><a href="../admin/duongsu_cn/view/'+data[0][i].id+'" class="fa  fa-eye fa-fw">Xem</a>'+"</td>"+
-                                    '<td>&nbsp&nbsp|</td>"'+
+                                    '<td>&nbsp&nbsp&nbsp&nbsp|</td>"'+
                                     '<td><a onclick= "return confirm('
                                     +"'Bạn có chắc muốn xóa?'"+
                                     ')" href="../admin/duongsu_cn/delete/'+data[0][i].id+'" class="fa fa-remove fa-fw" style="color: #ff0000;">Xóa</a></td>'+

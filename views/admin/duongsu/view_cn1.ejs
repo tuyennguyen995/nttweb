@@ -14,53 +14,49 @@
                   <div class="row">
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Họ tên *</label>
-                      <input required class="form-control" value="<%= data1[0][0].HOTEN%>" name="hoten" type="text" autofocus autocomplete="off">
+                      <input readonly class="form-control" value="<%= data1[0][0].HOTEN%>" name="hoten" type="text" autofocus autocomplete="off">
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Giới Tính</label>
-                      <select class="form-control" name="gioitinh" id="gioitinh">
+                      <select class="form-control" name="gioitinh" id="gioitinh" disabled>
                         <option value="<%= data1[0][0].GIOITINH%>"><%= data1[0][0].GIOITINH%></option>
-                        <option value="<%= gt%>"><%= gt%></option>
                       </select>
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Ngày sinh *</label>
-                      <input required class="form-control" value="<%= ns[0][0].to_char%>" name="ngaysinh" type="date" autofocus autocomplete="off">
+                      <input readonly class="form-control" value="<%= ns[0][0].to_char%>" name="ngaysinh" type="date" autofocus autocomplete="off">
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Số CMND *</label>
-                      <input required class="form-control" value="<%= data1[0][0].CMND%>" name="cmnd" type="text" autofocus autocomplete="off">
+                      <input readonly class="form-control" value="<%= data1[0][0].CMND%>" name="cmnd" type="text" autofocus autocomplete="off">
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Ngày cấp *</label>
-                      <input required class="form-control" value="<%= nc[0][0].to_char%>" name="ngaycap" type="date" autofocus autocomplete="off">
+                      <input readonly class="form-control" value="<%= nc[0][0].to_char%>" name="ngaycap" type="date" autofocus autocomplete="off">
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Nơi cấp *</label>
-                      <input required class="form-control" value="<%= data1[0][0].NOICAP%>" name="noicap" type="rext" autofocus autocomplete="off">
+                      <input readonly class="form-control" value="<%= data1[0][0].NOICAP%>" name="noicap" type="rext" autofocus autocomplete="off">
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Quốc Tịch*</label>
-                      <input required class="form-control" value="<%= data1[0][0].QUOCTICH%>" name="quoctich" type="text" autofocus autocomplete="off">
+                      <input readonly class="form-control" value="<%= data1[0][0].QUOCTICH%>" name="quoctich" type="text" autofocus autocomplete="off">
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label for="tinhthanh">Tình trạng</label>
-                      <select class="form-control" name="tinhtrang" id="tinhtrang">
+                      <select class="form-control" name="tinhtrang" id="tinhtrang" disabled>
                                   <option value="<%= data1[0][0].TINHTRANG%>"><%= data1[0][0].TINHTRANG%></option>
                                   <option value="Đã chết">Đã chết</option>
                                 </select>
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Ghi chú</label>
-                      <input class="form-control" value="<%= data1[0][0].GHICHU%>" name="ghichu" type="text" autofocus autocomplete="off">
+                      <input readonly class="form-control" value="<%= data1[0][0].GHICHU%>" name="ghichu" type="text" autofocus autocomplete="off">
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Trạng thái</label>
-                      <select class="form-control" name="tthai">
-                        <option value="<%= data1[0][0].trangthai%>"><%= data1[0][0].TEN_TRANGTHAI%></option>
-                        <% tt.forEach(function(ds){ %>
-                            <option value='<%= ds.id%>'><%= ds.TEN_TRANGTHAI%></option>
-                        <%})%>
+                      <select class="form-control" name="tthai" disabled>
+                        <option value="<%= data1[0][0].trang_thai%>"><%= data1[0][0].TEN_TRANGTHAI%></option>
                       </select>
                     </div>
                   </div>
@@ -77,42 +73,33 @@
                   <div class="row">
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label for="tinhthanh">Tỉnh thành </label>
-                      <select class="form-control" name="tinhthanh" id="list1" onchange="getSelect1();">
+                      <select class="form-control" name="tinhthanh" id="list1" onchange="getSelect1();" disabled>
                         <option value="<%= data1[0][0].ma_diachi%>"><%= data1[0][0].TEN_TINH%></option>
-                        <% data4.forEach(function(ds){ %>
-                            <option value='<%= ds.id%>'><%= ds.TEN_TINH%></option>
-                        <%})%>
                       </select>
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <div id="list2" onchange="getSelect2();">
                         <label for="quanhuyen">Quận/Huyện </label>
-                        <select class="form-control" name="" id="quanhuyen">
+                        <select class="form-control" name="" id="quanhuyen" disabled>
                           <option value="<%= data1[0][0].ma_quan_huyen%>"><%= data1[0][0].TEN_QUAN_HUYEN%></option>
-                          <% data2.forEach(function(ds){ %>
-                              <option value='<%= ds.id%>'><%= ds.TEN_QUAN_HUYEN%></option>
-                          <%})%>
                           </select>
                       </div>
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <div id="list3">
                         <label for="phuongxa">Phường/Xã </label>
-                        <select class="form-control" name="phuongxa" id="phuongxa">
+                        <select class="form-control" name="phuongxa" id="phuongxa" disabled>
                           <option value="<%= data1[0][0].ma_diachi%>"><%= data1[0][0].TEN_PHUONG_XA%></option>
-                          <% data3.forEach(function(ds){ %>
-                              <option value='<%= ds.id%>'><%= ds.TEN_PHUONG_XA%></option>
-                          <%})%>
                         </select>
                       </div>
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Địa chỉ (Số/Đường/Khóm/Ấp) *</label>
-                      <input required class="form-control" value="<%= data1[0][0].DIACHI_SO%>" name="diachi" type="text" autofocus autocomplete="off">
+                      <input readonly class="form-control" value="<%= data1[0][0].DIACHI_SO%>" name="diachi" type="text" autofocus autocomplete="off">
                     </div>
                     <div class="form-group col-md-4" style="margin-left: 5px;">
                       <label>Số điện thoại</label>
-                      <input class="form-control" value="<%= data1[0][0].SDT%>" name="sdt" type="text" autofocus autocomplete="off">
+                      <input readonly class="form-control" value="<%= data1[0][0].SDT%>" name="sdt" type="text" autofocus autocomplete="off">
                     </div>
                   </div>
                 </div>
@@ -128,11 +115,8 @@
                     <div class="form-group col-md-12" style="margin-left: 5px;">
                       <div class="col-md-4" style="padding-left: 0px;">
                         <label for="tinhthanh">Tình trạng hôn nhân </label>
-                        <select class="form-control" name="hon_nhan" id="hon_nhan" onchange="getSelect3();">
+                        <select class="form-control" name="hon_nhan" id="hon_nhan" onchange="getSelect3();" disabled>
                           <option value="<%= data1[0][0].tt_honnhan%>"><%= data1[0][0].TEN_TT_HONNHAN%></option>
-                          <% hn.forEach(function(ds){ %>
-                              <option value='<%= ds.id%>'><%= ds.TEN_TT_HONNHAN%></option>
-                          <%})%>
                                   </select>
                       </div>
                   </div>
@@ -144,8 +128,7 @@
               </div>
             </div>
             <div class="col-md-12">
-              <input style="float: right" type="submit" value="Cập nhật" class="btn btn-primary" />
-              <a style="float: right; margin-right: 4px; margin-bottom: 20px;" href="/admin/duongsu_cn" class="btn btn-default">Hủy</a>
+              <a style="float: right; margin-right: 4px; margin-bottom: 20px;" href="/admin/duongsu_cn" class="btn btn-default"><< Quay lại</a>
             </div>
           </div>
 
@@ -160,239 +143,3 @@
 </div>
 <!-- /#page-wrapper -->
 </div>
-<!-- /#wrapper -->
-<script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
-<!-- Sử lý quan huyen va thong bao -->
-<script>
-  function getSelect1() {
-    //Thông báo kiểm tra tên user có tồn tại chưa
-    const socket = io("https://nttweb.herokuapp.com/");
-    socket.on("server_sendData_info", function(data) {
-      if (data == -4) {
-        alert("Đương sự đã tồn tại!");
-      }else if (data == -5) {
-          alert("Đương sự vợ/chống không được giống đương sự chính!");
-      }else if (data == -6) {
-            alert("Đương sự vợ chồng đã tồn tại!");
-      }
-    })
-    var temp = "";
-    var Sel1 = document.getElementById("list1").value;
-    if (Sel1 == "") {
-      document.getElementById('list2').style.visibility = 'hidden';
-      document.getElementById('list3').style.visibility = 'hidden';
-    } else if (Sel1 != null) {
-      //Xử lý khi chọn select
-      socket.emit("trangchu_sendData_QH", Sel1);
-      socket.on("server_sendData_QH", function(data) {
-        $('#quanhuyen').html("<option value='" + temp + "'>-- Chọn Quận/Huyện --</option>");
-        $('#phuongxa').html("<option value='" + temp + "'>-- Chọn Phường/Xã --</option>");
-        for (var i = 0; i < data.length; i++) {
-          $('#quanhuyen').append("<option value='" + data[i].id + "'>" + data[i].TEN_QUAN_HUYEN + "</option>");
-        }
-      });
-      document.getElementById('list2').style.visibility = 'visible';
-    } else {
-      document.getElementById('list2').style.visibility = 'hidden';
-      document.getElementById('list3').style.visibility = 'hidden';
-    }
-    return false;
-  }
-</script>
-<!-- Sử lý phường xã -->
-<script>
-  function getSelect2() {
-    var Sel1 = document.getElementById("quanhuyen").value;
-    if (Sel1 == "") {
-      document.getElementById('list3').style.visibility = 'hidden';
-    } else if (Sel1 != null) {
-      //Xử lý khi chọn select
-      //Khi up ken heruku nho thay doi địc chỉ này
-      const socket = io("https://nttweb.herokuapp.com/");
-      socket.emit("trangchu_sendData_PX", Sel1);
-      socket.on("server_sendData_PX", function(data) {
-        $('#phuongxa').html('<option value = "">-- Chọn Phường/Xã --</option>');
-        for (var i = 0; i < data.length; i++) {
-          $('#phuongxa').append("<option value='" + data[i].id + "'>" + data[i].TEN_PHUONG_XA + "</option>");
-        }
-      });
-      document.getElementById('list3').style.visibility = 'visible';
-    } else {
-      document.getElementById('list3').style.visibility = 'hidden';
-    }
-    return false;
-  }
-</script>
-<!-- Sử lý hôn nhân -->
-<script>
-  function getSelect3() {
-    var Sel1 = document.getElementById("hon_nhan").value;
-    if (Sel1 == 2) {
-        $('#group_honnhan').append('<hr/>'+
-                            '<div class="row">'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Họ tên Vợ/Chồng*</label>'+
-                              '<input required class="form-control" placeholder="Nhập họ tên" name="hoten_vc" type="text" autofocus autocomplete="off">'+
-                            '</div>'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Ngày sinh *</label>'+
-                              '<input required class="form-control" placeholder="Nhập ngày sinh" name="ngaysinh_vc" type="date" autofocus autocomplete="off">'+
-                            '</div>'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Số CMND *</label>'+
-                              '<input required class="form-control" placeholder="Nhập CMND" name="cmnd_vc" type="text" autofocus autocomplete="off">'+
-                            '</div>'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Ngày cấp *</label>'+
-                              '<input required class="form-control" placeholder="Nhập ngày cấp" name="ngaycap_vc" type="date" autofocus autocomplete="off">'+
-                            '</div>'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Nơi cấp *</label>'+
-                              '<input required class="form-control" placeholder="Nhập nơi cấp" name="noicap_vc" type="rext" autofocus autocomplete="off">'+
-                            '</div>'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Quốc Tịch*</label>'+
-                              '<input required class="form-control" placeholder="Nhập Quốc tịch" name="quoctich_vc" type="text" autofocus autocomplete="off">'+
-                            '</div>'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Ghi chú</label>'+
-                              '<input  class="form-control" placeholder="Nhập ghi chú" name="ghichu_vc" type="text" autofocus autocomplete="off">'+
-                            '</div>'+
-                          '</div>'+
-                          '<hr/>'+
-                          '<div class="row">'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Địa chỉ *</label>'+
-                              '<select class="form-control" name="dia_chi" id="dia_chi" onchange="getSelect6();">'+
-                                        '<option value="1">Cùng địa chỉ</option>'+
-                                        '<option value="2">Khác</option>'+
-                                      '</select>'+
-                            '</div>'+
-                          '</div>'+
-                          '<div class="row" id="diachi_vc">'+
-                          '</div>'+
-                          '<hr/>'+
-                          '<div class="row">'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Số đăng ký kết hôn*</label>'+
-                              '<input required class="form-control" placeholder="Nhập số đăng ký" name="so_dk" type="text" autofocus autocomplete="off">'+
-                            '</div>'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Quyển số*</label>'+
-                              '<input required class="form-control" placeholder="Nhập số quyển" name="so_quyen" type="text" autofocus autocomplete="off">'+
-                            '</div>'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Ngày cấp *</label>'+
-                              '<input required class="form-control" name="ngaycap_gcn" type="date" autofocus autocomplete="off">'+
-                            '</div>'+
-                            '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-                              '<label>Nơi cấp*</label>'+
-                              '<input required class="form-control" placeholder="Nhập nơi cấp" name="noicap_gcn" type="text" autofocus autocomplete="off">'+
-                            '</div>'+
-                          '</div>'
-                        );
-    }
-    else {
-      $('#group_honnhan').html("");
-    }
-    return false;
-  }
-</script>
-<!-- Sử lý quan huyen v/c -->
-<script>
-  function getSelect4() {
-    //Thông báo kiểm tra tên user có tồn tại chưa
-    const socket = io("https://nttweb.herokuapp.com/");
-    var temp = "";
-    var Sel1 = document.getElementById("tinhthanh_vc").value;
-    if (Sel1 == "") {
-      document.getElementById('quanhuyen_vc').style.visibility = 'hidden';
-      document.getElementById('phuongxa_vc').style.visibility = 'hidden';
-    } else if (Sel1 != null) {
-      //Xử lý khi chọn select
-      socket.emit("trangchu_sendData_QH", Sel1);
-      socket.on("server_sendData_QH", function(data) {
-        $('#quanhuyen1').html("<option value='" + temp + "'>-- Chọn Quận/Huyện --</option>");
-        $('#phuongxa1').html("<option value='" + temp + "'>-- Chọn Phường/Xã --</option>");
-        for (var i = 0; i < data.length; i++) {
-          $('#quanhuyen1').append("<option value='" + data[i].id + "'>" + data[i].TEN_QUAN_HUYEN + "</option>");
-        }
-      });
-      document.getElementById('quanhuyen_vc').style.visibility = 'visible';
-    } else {
-      document.getElementById('quanhuyen_vc').style.visibility = 'hidden';
-      document.getElementById('phuongxa_vc').style.visibility = 'hidden';
-    }
-    return false;
-  }
-</script>
-<!-- sử lý phường xã v/c -->
-<script>
-  function getSelect5() {
-    var Sel1 = document.getElementById("quanhuyen1").value;
-    if (Sel1 == "") {
-      document.getElementById('phuongxa_vc').style.visibility = 'hidden';
-    } else if (Sel1 != null) {
-      //Xử lý khi chọn select
-      //Khi up ken heruku nho thay doi địc chỉ này
-      const socket = io("https://nttweb.herokuapp.com/");
-      socket.emit("trangchu_sendData_PX", Sel1);
-      socket.on("server_sendData_PX", function(data) {
-        $('#phuongxa1').html('<option value = "">-- Chọn Phường/Xã --</option>');
-        for (var i = 0; i < data.length; i++) {
-          $('#phuongxa1').append("<option value='" + data[i].id + "'>" + data[i].TEN_PHUONG_XA + "</option>");
-        }
-      });
-      document.getElementById('phuongxa_vc').style.visibility = 'visible';
-    } else {
-      document.getElementById('phuongxa_vc').style.visibility = 'hidden';
-    }
-    return false;
-  }
-</script>
-<!-- Sử lý địa chỉ vợ chồng -->
-<script>
-  function getSelect6() {
-    var Sel1 = document.getElementById("dia_chi").value;
-    if (Sel1 == 2) {
-      $('#diachi_vc').append('<div class="form-group col-md-4" style="margin-left: 5px;">'+
-        '<label for="tinhthanh">Tỉnh thành </label>'+
-        '<select class="form-control" name="tinhthanh_vc" id="tinhthanh_vc" onchange="getSelect4();">'+
-                    '<option value="">-- Chọn Tỉnh thành --</option>'+
-                    '<% data5.forEach(function(ds){ %>'+
-                        '<option value="<%= ds.id%>"><%= ds.TEN_TINH%></option>'+
-                    '<%})%>'+
-                  '</select>'+
-      '</div>'+
-      '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-        '<div id="quanhuyen_vc" style="visibility: hidden;" onchange="getSelect5();">'+
-          '<label for="quanhuyen">Quận/Huyện </label>'+
-          '<select class="form-control" name="" id="quanhuyen1">'+
-                      '<option value="">-- Chọn Quận/Huyện --</option>'+
-                    '</select>'+
-        '</div>'+
-      '</div>'+
-      '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-        '<div id="phuongxa_vc" style="visibility: hidden;">'+
-          '<label for="phuongxa">Phường/Xã </label>'+
-          '<select class="form-control" name="phuongxa1" id="phuongxa1">'+
-                      '<option value= "">-- Chọn Phường/Xã --</option>'+
-                    '</select>'+
-        '</div>'+
-      '</div>'+
-      '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-        '<label>Địa chỉ (Số/Đường/Khóm/Ấp) *</label>'+
-        '<input required class="form-control" placeholder="Nhập Số/Đường/Khóm/Ấp" name="diachi_vc" type="text" autofocus autocomplete="off">'+
-      '</div>'+
-      '<div class="form-group col-md-4" style="margin-left: 5px;">'+
-        '<label>Số điện thoại</label>'+
-        '<input class="form-control" placeholder="Nhập số điện thoại" name="sdt_vc" type="text" autofocus autocomplete="off">'+
-      '</div>'
-                      );
-    }
-    else {
-      $('#diachi_vc').html("");
-    }
-    return false;
-  }
-</script>
