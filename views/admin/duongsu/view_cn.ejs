@@ -1,0 +1,288 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="page-header">Thêm Đương sự</h1>
+        <form class="form-horizontal" action="" method="POST" enctype="application/x-www-form-urlencoded" onsubmit="return checkPw(this);">
+          <div class="row">
+            <div class=" col-lg-12">
+              <div class=" panel panel-default">
+                <div class="panel-heading">
+                  Thông tin Đương sự
+                </div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Họ tên *</label>
+                      <input readonly class="form-control" value="<%= data1[0][0].HOTEN%>" name="hoten" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Giới Tính</label>
+                      <select class="form-control" name="gioitinh" id="gioitinh">
+                        <option value="<%= data1[0][0].GIOITINH%>"><%= data1[0][0].GIOITINH%></option>
+                        <option value="<%= gt%>"><%= gt%></option>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Ngày sinh *</label>
+                      <input readonly class="form-control" value="<%= ns[0][0].to_char%>" name="ngaysinh" type="date" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Số CMND *</label>
+                      <input required class="form-control" value="<%= data1[0][0].CMND%>" name="cmnd" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Ngày cấp *</label>
+                      <input readonly class="form-control" value="<%= nc[0][0].to_char%>" name="ngaycap" type="date" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Nơi cấp *</label>
+                      <input readonly class="form-control" value="<%= data1[0][0].NOICAP%>" name="noicap" type="rext" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Quốc Tịch*</label>
+                      <input readonly class="form-control" value="<%= data1[0][0].QUOCTICH%>" name="quoctich" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label for="tinhthanh">Tình trạng</label>
+                      <select class="form-control" name="tinhtrang" id="tinhtrang">
+                                  <option value="<%= data1[0][0].TINHTRANG%>"><%= data1[0][0].TINHTRANG%></option>
+                                  <option value="Đã chết">Đã chết</option>
+                                </select>
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Ghi chú</label>
+                      <input readonly class="form-control" value="<%= data1[0][0].GHICHU%>" name="ghichu" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Trạng thái</label>
+                      <select class="form-control" name="tthai">
+                        <option value="<%= data1[0][0].trang_thai%>"><%= data1[0][0].TEN_TRANGTHAI%></option>
+                        <% tt.forEach(function(ds){ %>
+                            <option value="<%= ds.id%>"><%= ds.TEN_TRANGTHAI%></option>
+                        <%})%>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Close panel -->
+            </div>
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  Địa chỉ liên hệ
+                </div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label for="tinhthanh">Tỉnh thành </label>
+                      <select class="form-control" name="tinhthanh" id="list1" onchange="getSelect1();">
+                        <option value="<%= data1[0][0].ma_diachi%>"><%= data1[0][0].TEN_TINH%></option>
+                        <% data4.forEach(function(ds){ %>
+                            <option value='<%= ds.id%>'><%= ds.TEN_TINH%></option>
+                        <%})%>
+                      </select>
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <div id="list2" onchange="getSelect2();">
+                        <label for="quanhuyen">Quận/Huyện </label>
+                        <select class="form-control" name="" id="quanhuyen">
+                          <option value="<%= data1[0][0].ma_quan_huyen%>"><%= data1[0][0].TEN_QUAN_HUYEN%></option>
+                          <% data2.forEach(function(ds){ %>
+                              <option value='<%= ds.id%>'><%= ds.TEN_QUAN_HUYEN%></option>
+                          <%})%>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <div id="list3">
+                        <label for="phuongxa">Phường/Xã </label>
+                        <select class="form-control" name="phuongxa" id="phuongxa">
+                          <option value="<%= data1[0][0].ma_diachi%>"><%= data1[0][0].TEN_PHUONG_XA%></option>
+                          <% data3.forEach(function(ds){ %>
+                              <option value='<%= ds.id%>'><%= ds.TEN_PHUONG_XA%></option>
+                          <%})%>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Địa chỉ (Số/Đường/Khóm/Ấp) *</label>
+                      <input readonly class="form-control" value="<%= data1[0][0].DIACHI_SO%>" name="diachi" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Số điện thoại</label>
+                      <input readonly class="form-control" value="<%= data1[0][0].SDT%>" name="sdt" type="text" autofocus autocomplete="off">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  Thông tin Hôn nhân
+                </div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="form-group col-md-12" style="margin-left: 5px;">
+                      <div class="col-md-4" style="padding-left: 0px;">
+                        <label for="tinhthanh">Tình trạng hôn nhân </label>
+                        <select class="form-control" name="hon_nhan" id="hon_nhan" onchange="getSelect3();">
+                          <option value="<%= data1[0][0].tt_honnhan%>"><%= data1[0][0].TEN_TT_HONNHAN%></option>
+                          <% hn.forEach(function(ds){ %>
+                              <option value= "<%= ds.id%>"><%= ds.TEN_TT_HONNHAN%></option>
+                          <%})%>
+                                  </select>
+                      </div>
+                  </div>
+                </div>
+                <!-- Chèn JS -->
+                <div class="group_honnhan" id="group_honnhan">
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <input style="float: right" type="submit" value="Cập nhật" class="btn btn-primary" />
+              <a style="float: right; margin-right: 4px; margin-bottom: 20px;" href="/admin/duongsu_cn" class="btn btn-default">Hủy</a>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <!-- /.col-lg-12 -->
+    </div>
+  </div>
+  <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+</div>
+<!-- /#wrapper -->
+<script type="text/javascript">
+  var Sel1 = <%= data1[0][0].tt_honnhan%>;
+  if (Sel1 == 2) {
+      $('#group_honnhan').append('<hr/>'+
+                          '<div class="row">'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Họ tên Vợ/Chồng*</label>'+
+                            '<input readonly class="form-control" value = "'+"<%= data_vc[0][0].HOTEN%>"+'" name="hoten_vc" type="text" autofocus autocomplete="off">'+
+                          '</div>'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Ngày sinh *</label>'+
+                            '<input readonly class="form-control" value = "'+"<%= ns_vc[0][0].to_char%>"+'"  name="ngaysinh_vc" type="date" autofocus autocomplete="off">'+
+                          '</div>'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Số CMND *</label>'+
+                            '<input readonly class="form-control" value = "'+"<%= data_vc[0][0].CMND%>"+'" name="cmnd_vc" type="text" autofocus autocomplete="off">'+
+                          '</div>'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Ngày cấp *</label>'+
+                            '<input readonly class="form-control" value = "'+"<%= nc_vc[0][0].to_char%>"+'" name="ngaycap_vc" type="date" autofocus autocomplete="off">'+
+                          '</div>'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Nơi cấp *</label>'+
+                            '<input readonly class="form-control" value = "'+"<%= data_vc[0][0].NOICAP%>"+'" name="noicap_vc" type="rext" autofocus autocomplete="off">'+
+                          '</div>'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Quốc Tịch*</label>'+
+                            '<input readonly class="form-control" value = "'+"<%= data_vc[0][0].QUOCTICH%>"+'" name="quoctich_vc" type="text" autofocus autocomplete="off">'+
+                          '</div>'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Ghi chú</label>'+
+                            '<input readonly class="form-control" value = "'+"<%= data_vc[0][0].GHICHU%>"+'" name="ghichu_vc" type="text" autofocus autocomplete="off">'+
+                          '</div>'+
+                        '</div>'+
+                        '<hr/>'+
+                        '<div class="row">'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Địa chỉ *</label>'+
+                            '<select class="form-control" name="dia_chi" id="dia_chi" onchange="getSelect6();">'+
+                                      '<option value="1">Cùng địa chỉ</option>'+
+                                      '<option value="2">Khác</option>'+
+                                    '</select>'+
+                          '</div>'+
+                        '</div>'+
+                        '<div class="row" id="diachi_vc">'+
+                        '</div>'+
+                        '<hr/>'+
+                        '<div class="row">'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Số đăng ký kết hôn*</label>'+
+                            '<input readonly class="form-control" value = "'+"<%= data1[0][0].SO_DK%>"+'" name="so_dk" type="text" autofocus autocomplete="off">'+
+                          '</div>'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Quyển số*</label>'+
+                            '<input readonly class="form-control" value = "'+"<%= data1[0][0].QUYENSO%>"+'" name="so_quyen" type="text" autofocus autocomplete="off">'+
+                          '</div>'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Ngày cấp *</label>'+
+                            '<input readonly class="form-control" value = "'+"<%= nc_gcn[0][0].to_char%>"+'" name="ngaycap_gcn" type="date" autofocus autocomplete="off">'+
+                          '</div>'+
+                          '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+                            '<label>Nơi cấp*</label>'+
+                            '<input readonly class="form-control" value = "'+"<%= data1[0][0].NOICAP_GCN%>"+'" name="noicap_gcn" type="text" autofocus autocomplete="off">'+
+                          '</div>'+
+                        '</div>'
+                      );
+  }
+  else {
+    $('#group_honnhan').html("");
+  }
+</script>
+<script type="text/javascript">
+  var ma_dc = "<%= data1[0][0].ma_diachi%>"
+  var ma_dc_vc = "<%= data_vc[0][0].ma_diachi%>"
+  var dc_so = "<%= data1[0][0].DIACHI_SO%>"
+  var dc_so_vc = "<%= data_vc[0][0].DIACHI_SO%>"
+  if (ma_dc != ma_dc_vc && dc_so != dc_so_vc) {
+    $('#dia_chi').html("");
+    $('#dia_chi').append('<option value="2">Khác</option>'+ '<option value="1">Cùng địa chỉ</option>');
+    $('#diachi_vc').append('<div class="form-group col-md-4" style="margin-left: 5px;">'+
+      '<label for="tinhthanh">Tỉnh thành </label>'+
+      '<select class="form-control" name="tinhthanh_vc" id="tinhthanh_vc" onchange="getSelect4();">'+
+                  '<option value="'+<%=data_vc[0][0].ma_tinh%>+'">'+"<%=data_vc[0][0].TEN_TINH%>"+'</option>'+
+                  '<% data4_vc.forEach(function(ds){ %>'+
+                      '<option value="<%= ds.id%>"><%= ds.TEN_TINH%></option>'+
+                  '<%})%>'+
+                '</select>'+
+    '</div>'+
+    '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+      '<div id="quanhuyen_vc" onchange="getSelect5();">'+
+        '<label for="quanhuyen">Quận/Huyện </label>'+
+        '<select class="form-control" name="" id="quanhuyen1">'+
+                    '<option value="'+<%=data_vc[0][0].ma_quan_huyen%>+'">'+"<%=data_vc[0][0].TEN_QUAN_HUYEN%>"+'</option>'+
+                    '<% data2_vc.forEach(function(ds){ %>'+
+                        '<option value="<%= ds.id%>"><%= ds.TEN_QUAN_HUYEN%></option>'+
+                    '<%})%>'+
+                  '</select>'+
+      '</div>'+
+    '</div>'+
+    '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+      '<div id="phuongxa_vc">'+
+        '<label for="phuongxa">Phường/Xã </label>'+
+        '<select class="form-control" name="phuongxa1" id="phuongxa1">'+
+                    '<option value="'+<%=data_vc[0][0].ma_diachi%>+'">'+"<%=data_vc[0][0].TEN_PHUONG_XA%>"+'</option>'+
+                    '<% data3_vc.forEach(function(ds){ %>'+
+                        '<option value="<%= ds.id%>"><%= ds.TEN_PHUONG_XA%></option>'+
+                    '<%})%>'+
+                  '</select>'+
+      '</div>'+
+    '</div>'+
+    '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+      '<label>Địa chỉ (Số/Đường/Khóm/Ấp) *</label>'+
+      '<input readonly class="form-control" value="'+"<%=data_vc[0][0].DIACHI_SO%>"+'" name="diachi_vc" type="text" autofocus autocomplete="off">'+
+    '</div>'+
+    '<div class="form-group col-md-4" style="margin-left: 5px;">'+
+      '<label>Số điện thoại</label>'+
+      '<input readonly class="form-control" value="'+"<%=data_vc[0][0].SDT%>"+'" name="sdt_vc" type="text" autofocus autocomplete="off">'+
+    '</div>'
+                    );
+  }
+  else {
+    $('#diachi_vc').html("");
+  }
+
+</script>
