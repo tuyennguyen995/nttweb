@@ -1,0 +1,198 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="page-header">Thêm Đương sự</h1>
+        <form class="form-horizontal" action="" method="POST" enctype="application/x-www-form-urlencoded" onsubmit="return checkPw(this);">
+          <div class="row">
+            <div class=" col-lg-12">
+              <div class=" panel panel-default">
+                <div class="panel-heading">
+                  Thông tin Tổ chức
+                </div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Tên Công ty *</label>
+                      <input required class="form-control" placeholder="Nhập tên công ty" name="ten_ct" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Mã số *</label>
+                      <input required class="form-control" placeholder="Nhập mã số công ty" name="ma_ct" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Ngày đăng ký *</label>
+                      <input required class="form-control"  name="ngay_dk" type="date" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label for="tinhthanh">Tỉnh thành </label>
+                      <select class="form-control" name="tinhthanh" id="list1" onchange="getSelect1();">
+                                  <option value="">-- Chọn Tỉnh thành --</option>
+                                  <% data1.forEach(function(ds){ %>
+                                      <option value='<%= ds.id%>'><%= ds.TEN_TINH%></option>
+                                  <%})%>
+                                </select>
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <div id="list2" style="visibility: hidden;" onchange="getSelect2();">
+                        <label for="quanhuyen">Quận/Huyện </label>
+                        <select class="form-control" name="" id="quanhuyen">
+                                    <option value="">-- Chọn Quận/Huyện --</option>
+                                  </select>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <div id="list3" style="visibility: hidden;">
+                        <label for="phuongxa">Phường/Xã </label>
+                        <select class="form-control" name="phuongxa" id="phuongxa">
+                                    <option value= "">-- Chọn Phường/Xã --</option>
+                                  </select>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Địa chỉ (Số/Đường/Khóm/Ấp) *</label>
+                      <input required class="form-control" placeholder="Nhập Số/Đường/Khóm/Ấp" name="diachi" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Số điện thoại *</label>
+                      <input required class="form-control" placeholder="Nhập số điện thoại" name="sdt" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Mail </label>
+                      <input class="form-control" placeholder="Nhập địa chỉ mail" name="mail" type="mail" autofocus autocomplete="off">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Close panel -->
+            </div>
+            <div class="col-md-12">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  Thông tin Đại diện
+                </div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Xưng hô * </label>
+                      <select class="form-control" name="xungho" >
+                                  <option value= "Ông" >Ông</option>
+                                  <option value= "Bà" >Bà</option>
+                                </select>
+                    </div>
+                  </div>
+                  <hr/>
+                  <div class="row">
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Họ tên *</label>
+                      <input required class="form-control" placeholder="Nhập họ tên" name="hoten" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Ngày sinh *</label>
+                      <input required class="form-control" placeholder="Nhập ngày sinh" name="ngaysinh" type="date" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Số CMND *</label>
+                      <input required class="form-control" placeholder="Nhập CMND" name="cmnd" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Ngày cấp *</label>
+                      <input required class="form-control" placeholder="Nhập ngày cấp" name="ngaycap" type="date" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Nơi cấp *</label>
+                      <input required class="form-control" placeholder="Nhập nơi cấp" name="noicap" type="rext" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Quốc Tịch*</label>
+                      <input required class="form-control" placeholder="Nhập Quốc tịch" name="quoctich" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Chức vụ*</label>
+                      <input required class="form-control" placeholder="Nhập chức vụ" name="chucvu" type="text" autofocus autocomplete="off">
+                    </div>
+                    <div class="form-group col-md-4" style="margin-left: 5px;">
+                      <label>Ghi chú</label>
+                      <input class="form-control" placeholder="Nhập ghi chú" name="ghichu" type="text" autofocus autocomplete="off">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <input style="float: right" type="submit" value="Tạo đương sự" class="btn btn-success" />
+              <a style="float: right; margin-right: 4px; margin-bottom: 20px;" href="/admin/duongsu_tc" class="btn btn-default">Hủy</a>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <!-- /.col-lg-12 -->
+    </div>
+  </div>
+  <!-- /.row -->
+</div>
+<!-- /.container-fluid -->
+</div>
+<!-- /#page-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+<script src="https://nttweb.herokuapp.com/socket.io/socket.io.js"></script>
+<script>
+  function getSelect1() {
+    //Thông báo kiểm tra tên user có tồn tại chưa
+    const socket = io("https://nttweb.herokuapp.com/");
+    socket.on("server_sendData_info", function(data) {
+      if (data == -4) {
+        alert("Đương sự đã tồn tại!");
+      }else if (data == -5) {
+          alert("Đương sự đã tồn tại!");
+      }
+    })
+    var temp = "";
+    var Sel1 = document.getElementById("list1").value;
+    if (Sel1 == "") {
+      document.getElementById('list2').style.visibility = 'hidden';
+      document.getElementById('list3').style.visibility = 'hidden';
+    } else if (Sel1 != null) {
+      //Xử lý khi chọn select
+      socket.emit("trangchu_sendData_QH", Sel1);
+      socket.on("server_sendData_QH", function(data) {
+        $('#quanhuyen').html("<option value='" + temp + "'>-- Chọn Quận/Huyện --</option>");
+        $('#phuongxa').html("<option value='" + temp + "'>-- Chọn Phường/Xã --</option>");
+        for (var i = 0; i < data.length; i++) {
+          $('#quanhuyen').append("<option value='" + data[i].id + "'>" + data[i].TEN_QUAN_HUYEN + "</option>");
+        }
+      });
+      document.getElementById('list2').style.visibility = 'visible';
+    } else {
+      document.getElementById('list2').style.visibility = 'hidden';
+      document.getElementById('list3').style.visibility = 'hidden';
+    }
+    return false;
+  }
+</script>
+<script>
+  function getSelect2() {
+    var Sel1 = document.getElementById("quanhuyen").value;
+    if (Sel1 == "") {
+      document.getElementById('list3').style.visibility = 'hidden';
+    } else if (Sel1 != null) {
+      //Xử lý khi chọn select
+      //Khi up ken heruku nho thay doi địc chỉ này
+      const socket = io("https://nttweb.herokuapp.com/");
+      socket.emit("trangchu_sendData_PX", Sel1);
+      socket.on("server_sendData_PX", function(data) {
+        $('#phuongxa').html('<option value = "">-- Chọn Phường/Xã --</option>');
+        for (var i = 0; i < data.length; i++) {
+          $('#phuongxa').append("<option value='" + data[i].id + "'>" + data[i].TEN_PHUONG_XA + "</option>");
+        }
+      });
+      document.getElementById('list3').style.visibility = 'visible';
+    } else {
+      document.getElementById('list3').style.visibility = 'hidden';
+    }
+    return false;
+  }
+</script>
