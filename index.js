@@ -740,7 +740,7 @@ app.post('/admin/duongsu_cn/create', urlencodedParser, function(req, res) {
         DIACHI_SO: diachi,
         TINHTRANG: tinhtrang,
         tt_honnhan: honnhan,
-        vo_chong: hn.id,
+        vo_chong: null,
         GHICHU: ghichu,
         trang_thai: trangthai,
         danh_muc: danhmuc
