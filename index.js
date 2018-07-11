@@ -196,6 +196,10 @@ Passport.deserializeUser(function(name, done) {
     })
 });
 
+app.get('/logout', function(req, res){
+  req.user = null;
+  redirect('/login');
+})
 //Trang private admin
 app.get('/admin', (req, res) => {
   if (req.isAuthenticated()) {
